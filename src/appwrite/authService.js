@@ -1,6 +1,6 @@
 import { Account, Client, ID, OAuthProvider } from "appwrite";
 import { config } from "../assets/config";
-class auth {
+class Auth {
   client = new Client().setProject(config.appwriteProjectId);
   account;
   constructor() {
@@ -56,6 +56,27 @@ class auth {
     );
   }
   async getCurrentUser(){
-    
+    try {
+        const promise = await this.account.get()
+        return promise
+    } catch (error) {
+        throw error
+    }
+  }
+  async createRecovery({email}){
+    try {
+        this.account.createRecovery(email,"password-reset-page-link*******")
+    } catch (error) {
+        throw error
+    }
+  }
+  async updatePassword({email,secretKey , password}){
+    try {
+        this.account.updateRecovery(email,secretKey , password)
+    } catch (error) {
+        throw error
+    }
   }
 }
+export const authService = new Auth()
+
