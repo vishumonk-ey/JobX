@@ -1,8 +1,9 @@
+import { Axe } from 'lucide-react'
 import React from 'react'
 
 function Logo() {
   return (
-    <div>JobX</div>
+    <Axe/>
   )
 }
 

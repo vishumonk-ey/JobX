@@ -5,6 +5,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { authService } from '../appwrite/authService';
 import { useDispatch } from 'react-redux';
 import { login } from '../store/authSlice';
+import googleLogo from '../assets/google.svg'
+import { GithubIcon } from 'lucide-react';
 function Login() {
     const {register,handleSubmit , formState :{errors}} = useForm()
     const [error , setError] = useState()

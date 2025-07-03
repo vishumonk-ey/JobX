@@ -4,6 +4,7 @@ const initialState = {
 }
 const jobslice = createSlice ({
     name : "jobs" ,
+    initialState ,
     reducers : {
         addJobs : (state , action) =>{
             state.allJobs = action.payload
