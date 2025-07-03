@@ -35,15 +35,17 @@ function Signup() {
   const githubAuthHandler = () => {
       authService.OAuthGithub()
   };
-  // dikkat hai
-  const googleAuthHandler = () => {};
+
+  const googleAuthHandler = () => {
+    authService.OAuthGoogle()
+  };
   return (
     <div className="w-full flex items-center justify-center">
       <div className="w-full max-w-lg bg-indigo-200 flex flex-col items-center p-10 rounded-lg">
         <Logo />
         <h1 className="font-bold text-2xl">Sign in to your account</h1>
         <p>
-          Don't have an account ?{" "}
+          Already have an account ?{" "}
           <Link to="/login">
             <span className="text-white hover:text-indigo-500 transition-colors ease-in-out duration-300">
               Login
