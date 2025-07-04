@@ -61,7 +61,7 @@ function Header() {
     }
   };
   return (
-    <Header className="w-full">
+    <header className="w-full">
       <div className="px-6 md:px-15 bg-indigo-300 py-2 flex items-center justify-between dark:text-white">
         <div className="flex items-center space-x-2">
           <Logo />
@@ -279,7 +279,7 @@ function Header() {
           </button>
         </div>
       </div>
-    </Header>
+    </header>
   );
 }
 export default Header;

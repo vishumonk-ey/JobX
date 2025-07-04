@@ -6,13 +6,14 @@ import Input from './components/Input'
 import Signup from './components/Signup'
 import { Login } from './components'
 import Header from './components/header/Header'
+import Footer from './components/footer/Footer'
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <div className="w-full ">
       {/* <Login/> */}
-      <Header></Header>
+      <Footer/>
     </div>
   )
 }

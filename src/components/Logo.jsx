@@ -1,9 +1,9 @@
 import { Axe } from 'lucide-react'
 import React from 'react'
 
-function Logo() {
+function Logo({className}) {
   return (
-    <Axe/>
+    <Axe className={className}/>
   )
 }
 
