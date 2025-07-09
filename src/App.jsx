@@ -8,13 +8,15 @@ import { Login } from './components'
 import Header from './components/header/Header'
 import Footer from './components/footer/Footer'
 import JobItem from './components/JobItem'
+import JobTable from './components/JobTable'
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <div className="w-full ">
       {/* <Login/> */}
-      <JobItem/>
+      {/* <JobItem/> */}
+      <JobTable/>
     </div>
   )
 }
