@@ -16,14 +16,17 @@ function JobTable() {
   const [allJobs, setallJobs] = useState([]);
   const [dateFilter, setdateFilter] = useState(null);
   const [statusFilter, setstatusFilter] = useState(null);
-  useEffect(() => {
+  const [isLoading , setisLoading] = useState(true)
+  useEffect(() => { 
     const timeout = setTimeout(() => {
       const query =
         searchTerm === "" ? [] : [Query.equal("CompanyName", [searchTerm])];
+        setisLoading(true)
       databaseService
         .listDocuments([...query])
         .then((allJobs) => {
           setallJobs(allJobs);
+          setisLoading(false)
         })
         .catch((err) => {
           console.log("error while searching: ", err);
@@ -32,7 +35,28 @@ function JobTable() {
     return () => {
       clearTimeout(timeout);
     };
-  }, [searchTerm]);
+  }, [searchTerm , setallJobs ,setisLoading ]);
+  useEffect(() => {
+    const statusQuery =
+      statusFilter === null ? [] : [Query.equal("Status", [statusFilter])];
+    const dateQuery =
+      dateFilter === null
+        ? []
+        : [
+            dateFilter === "Oldest"
+              ? Query.orderAsc("AppliedDate")
+              : Query.orderDesc("AppliedDate"),
+          ];
+          setisLoading(true)
+    databaseService.listDocuments([...statusQuery, ...dateQuery])
+    .then((allJobs)=>{
+      setallJobs(allJobs)
+      setisLoading(false)
+    }).catch((err) => {
+      console.log("error while filter fetching:" , err);
+      
+    })
+  }, [statusFilter, dateFilter,setisLoading ,setallJobs]);
   return (
     <div className="rounded-lg bg-indigo-100">
       <div className="w-full flex flex-col md:flex-row items-center py-3 px-5 md:justify-between space-y-2 md:space-y-0">
@@ -58,15 +82,14 @@ function JobTable() {
           </Link>
           {/* Modernized Filter Dropdown */}
           <Listbox
-            value={{ date: dateFilter, status: statusFilter }}
-            onChange={() => {}}
-            //  both of the above attributes arent required in my case?
+
+          //  both of the above attributes arent required in my case?
           >
             <div className="relative">
               <ListboxButton className="px-3 py-2 bg-white hover:bg-indigo-100 flex items-center transition rounded-lg text-indigo-700 shadow border border-indigo-200 focus:ring-2 focus:ring-indigo-400 focus:outline-none">
                 <Filter className="w-4 h-4 text-indigo-500 mr-1.5" />
                 <span className="font-medium">Filter</span>
-                <ChevronDown className="ml-2 w-4 h-4 text-indigo-400"/>
+                <ChevronDown className="ml-2 w-4 h-4 text-indigo-400" />
               </ListboxButton>
               <Transition
                 enter="transition ease-out duration-200"
@@ -88,10 +111,11 @@ function JobTable() {
                     <ListboxOption
                       key={opt.value}
                       value={opt.value}
-                      as={React.Fragment} // what does this do ?
+                      as={React.Fragment} // what does this do ? dont add an extra wrapper
                     >
                       {({ active }) => (
                         // what is this active arguement and what does it do?
+                        // tells whether it is focused or hovered
                         <div
                           onClick={() =>
                             setdateFilter(
