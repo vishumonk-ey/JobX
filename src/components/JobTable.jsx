@@ -10,23 +10,36 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { databaseService } from "../appwrite/databaseService";
 import { Query } from "appwrite";
+import JobItem from "./JobItem";
 function JobTable() {
   const [filter, setFilter] = useState(null);
   const [searchTerm, setsearchTerm] = useState("");
   const [allJobs, setallJobs] = useState([]);
   const [dateFilter, setdateFilter] = useState(null);
   const [statusFilter, setstatusFilter] = useState(null);
-  const [isLoading , setisLoading] = useState(true)
-  useEffect(() => { 
+  const [isLoading, setisLoading] = useState(true);
+  useEffect(() => {
     const timeout = setTimeout(() => {
+      // let queryArr = [];
+      const statusQuery =
+        statusFilter === null ? [] : [Query.equal("Status", [statusFilter])];
+      const dateQuery =
+        dateFilter === null
+          ? []
+          : [
+              dateFilter === "Oldest"
+                ? Query.orderAsc("AppliedDate")
+                : Query.orderDesc("AppliedDate"),
+            ];
+      setisLoading(true);
       const query =
         searchTerm === "" ? [] : [Query.equal("CompanyName", [searchTerm])];
-        setisLoading(true)
+      setisLoading(true);
       databaseService
-        .listDocuments([...query])
+        .listDocuments([...query, ...statusQuery, ...dateQuery])
         .then((allJobs) => {
           setallJobs(allJobs);
-          setisLoading(false)
+          setisLoading(false);
         })
         .catch((err) => {
           console.log("error while searching: ", err);
@@ -35,28 +48,29 @@ function JobTable() {
     return () => {
       clearTimeout(timeout);
     };
-  }, [searchTerm , setallJobs ,setisLoading ]);
-  useEffect(() => {
-    const statusQuery =
-      statusFilter === null ? [] : [Query.equal("Status", [statusFilter])];
-    const dateQuery =
-      dateFilter === null
-        ? []
-        : [
-            dateFilter === "Oldest"
-              ? Query.orderAsc("AppliedDate")
-              : Query.orderDesc("AppliedDate"),
-          ];
-          setisLoading(true)
-    databaseService.listDocuments([...statusQuery, ...dateQuery])
-    .then((allJobs)=>{
-      setallJobs(allJobs)
-      setisLoading(false)
-    }).catch((err) => {
-      console.log("error while filter fetching:" , err);
-      
-    })
-  }, [statusFilter, dateFilter,setisLoading ,setallJobs]);
+  }, [searchTerm, setallJobs, setisLoading]);
+  // useEffect(() => {
+  //   const statusQuery =
+  //     statusFilter === null ? [] : [Query.equal("Status", [statusFilter])];
+  //   const dateQuery =
+  //     dateFilter === null
+  //       ? []
+  //       : [
+  //           dateFilter === "Oldest"
+  //             ? Query.orderAsc("AppliedDate")
+  //             : Query.orderDesc("AppliedDate"),
+  //         ];
+  //         setisLoading(true)
+  //   databaseService.listDocuments([...statusQuery, ...dateQuery])
+  //   .then((allJobs)=>{
+  //     setallJobs(allJobs)
+  //     setisLoading(false)
+  //   }).catch((err) => {
+  //     console.log("error while filter fetching:" , err);
+
+  //   })
+  // }, [statusFilter, dateFilter,setisLoading ,setallJobs]);
+  
   return (
     <div className="rounded-lg bg-indigo-100">
       <div className="w-full flex flex-col md:flex-row items-center py-3 px-5 md:justify-between space-y-2 md:space-y-0">
@@ -208,6 +222,38 @@ function JobTable() {
             </div>
           </Listbox>
         </div>
+      </div>
+      <div className="w-full mt-2">
+        <div className="w-full p-2 border-b  border-b-indigo-200 overflow-x-auto scrollbar-hide bg-indigo-400">
+          <div className="w-full overflow-x-auto scrollbar-hide">
+            <div className="w-full flex items-center">
+              <div className="flex flex-1 items-center">
+                <p className="flex-1 min-w-[200px] text-left text-base md:text-lg">
+                  Company Name
+                </p>
+                <p className="flex-1 min-w-[200px] text-left text-base md:text-lg">
+                  Role
+                </p>
+                <div className="flex-1 min-w-[150px]">
+                  <p
+                    className={`mx-auto w-fit px-3 py-1 text-center rounded-xl text-base font-medium md:text-lg `}
+                  >
+                    Status
+                  </p>
+                </div>
+                <p className="flex-1 min-w-[150px] text-left text-base md:text-lg">
+                  Applied Date
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        {isLoading ? (<div></div>) : (
+          allJobs.map((eachJob)=>(
+            <JobItem data={eachJob} key={eachJob.CompanyName}></JobItem>
+          ))
+        )}
+        {/* pagination logic */}
       </div>
     </div>
   );
