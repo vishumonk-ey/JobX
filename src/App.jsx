@@ -9,6 +9,7 @@ import Header from './components/header/Header'
 import Footer from './components/footer/Footer'
 import JobItem from './components/JobItem'
 import JobTable from './components/JobTable'
+import DashBoard from './components/DashBoard'
 function App() {
   const [count, setCount] = useState(0)
 
@@ -16,7 +17,7 @@ function App() {
     <div className="w-full ">
       {/* <Login/> */}
       {/* <JobItem/> */}
-      <JobTable/>
+      <DashBoard/>
     </div>
   )
 }
