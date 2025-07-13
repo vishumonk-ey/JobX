@@ -5,72 +5,75 @@ import {
   ListboxOptions,
   Transition,
 } from "@headlessui/react";
-import { ChevronDown, Filter, Plus, Search } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import { ChevronDown, Filter, Plus, Search ,Loader2 } from "lucide-react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { databaseService } from "../appwrite/databaseService";
 import { Query } from "appwrite";
 import JobItem from "./JobItem";
+import { useDispatch, useSelector } from "react-redux";
+import { addJobs } from "../store/JobsSlice";
 function JobTable() {
-  const [filter, setFilter] = useState(null);
+  const storeAllJobs = useSelector((state) => state.allJobs);
   const [searchTerm, setsearchTerm] = useState("");
   const [allJobs, setallJobs] = useState([]);
   const [dateFilter, setdateFilter] = useState(null);
   const [statusFilter, setstatusFilter] = useState(null);
   const [isLoading, setisLoading] = useState(true);
+  const [error, seterror] = useState("");
+  const dispatch = useDispatch();
+  const buildQueries = useCallback(() => {
+    let queries = [];
+    if (searchTerm.trim()) {
+      queries.push(
+        Query.equal("CompanyName", searchTerm.trim()),
+        Query.equal("Role", searchTerm.trim())
+      );
+    }
+    if (dateFilter) {
+      queries.push(
+        dateFilter === "Oldest"
+          ? Query.orderAsc("AppliedDate")
+          : Query.orderDesc("AppliedDate")
+      );
+    }
+    if (statusFilter) {
+      queries.push(Query.equal("Status", statusFilter));
+    }
+    return queries;
+  }, [searchTerm, dateFilter, statusFilter]);
+  const fetchData = useCallback(
+    async (queries) => {
+      try {
+        setisLoading(true);
+        seterror("");
+        const fetchedData = await databaseService.listDocuments(queries);
+        if (queries.length === 0) {
+          dispatch(addJobs(fetchedData));
+        }
+        setallJobs(fetchedData);
+      } catch (error) {
+        console.log("error while fetching:", error);
+        seterror("Failed to fetch jobs. Please try again.");
+      } finally {
+        setisLoading(false);
+      }
+    },
+    [setisLoading, seterror, dispatch]
+  );
   useEffect(() => {
     const timeout = setTimeout(() => {
-      // let queryArr = [];
-      const statusQuery =
-        statusFilter === null ? [] : [Query.equal("Status", [statusFilter])];
-      const dateQuery =
-        dateFilter === null
-          ? []
-          : [
-              dateFilter === "Oldest"
-                ? Query.orderAsc("AppliedDate")
-                : Query.orderDesc("AppliedDate"),
-            ];
-      setisLoading(true);
-      const query =
-        searchTerm === "" ? [] : [Query.equal("CompanyName", [searchTerm])];
-      setisLoading(true);
-      databaseService
-        .listDocuments([...query, ...statusQuery, ...dateQuery])
-        .then((allJobs) => {
-          setallJobs(allJobs);
-          setisLoading(false);
-        })
-        .catch((err) => {
-          console.log("error while searching: ", err);
-        });
+      const queries = buildQueries();
+      if (queries.length === 0 && storeAllJobs != null) {
+        setallJobs(storeAllJobs);
+      } else {
+        fetchData();
+      }
     }, 300);
     return () => {
       clearTimeout(timeout);
     };
-  }, [searchTerm, setallJobs, setisLoading]);
-  // useEffect(() => {
-  //   const statusQuery =
-  //     statusFilter === null ? [] : [Query.equal("Status", [statusFilter])];
-  //   const dateQuery =
-  //     dateFilter === null
-  //       ? []
-  //       : [
-  //           dateFilter === "Oldest"
-  //             ? Query.orderAsc("AppliedDate")
-  //             : Query.orderDesc("AppliedDate"),
-  //         ];
-  //         setisLoading(true)
-  //   databaseService.listDocuments([...statusQuery, ...dateQuery])
-  //   .then((allJobs)=>{
-  //     setallJobs(allJobs)
-  //     setisLoading(false)
-  //   }).catch((err) => {
-  //     console.log("error while filter fetching:" , err);
-
-  //   })
-  // }, [statusFilter, dateFilter,setisLoading ,setallJobs]);
-  
+  }, [setallJobs, setisLoading, buildQueries, fetchData]);
   return (
     <div className="rounded-lg bg-indigo-100">
       <div className="w-full flex flex-col md:flex-row items-center py-3 px-5 md:justify-between space-y-2 md:space-y-0">
@@ -248,8 +251,16 @@ function JobTable() {
             </div>
           </div>
         </div>
-        {isLoading ? (<div></div>) : (
-          allJobs.map((eachJob)=>(
+        {isLoading ? (
+          <div className="flex justify-center items-center py-60">
+            <Loader2 className="text-indigo-600 animate-spin w-10 h-10 "/>
+          </div>
+        ) : error ? (
+          <div className="py-60 flex justify-center items-center">
+            <p className="text-red-500 hover:text-red-400 font-semibold">{error}</p>
+          </div>
+        ) : (
+          allJobs.map((eachJob) => (
             <JobItem data={eachJob} key={eachJob.CompanyName}></JobItem>
           ))
         )}
