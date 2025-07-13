@@ -5,8 +5,16 @@ import {
   ListboxOptions,
   Transition,
 } from "@headlessui/react";
-import { ChevronDown, Filter, Plus, Search ,Loader2 } from "lucide-react";
-import React, { useCallback, useEffect, useState } from "react";
+import {
+  ChevronDown,
+  Filter,
+  Plus,
+  Search,
+  Loader2,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { databaseService } from "../appwrite/databaseService";
 import { Query } from "appwrite";
@@ -22,8 +30,11 @@ function JobTable() {
   const [isLoading, setisLoading] = useState(true);
   const [error, seterror] = useState("");
   const dispatch = useDispatch();
+  const [pageNumber, setpageNumber] = useState(1);
+  const [totalJobs, setTotalJobs] = useState(0);
   const buildQueries = useCallback(() => {
     let queries = [];
+    queries.push[Query.offset( (pageNumber - 1)*25)]
     if (searchTerm.trim()) {
       queries.push(
         Query.equal("CompanyName", searchTerm.trim()),
@@ -41,14 +52,23 @@ function JobTable() {
       queries.push(Query.equal("Status", statusFilter));
     }
     return queries;
-  }, [searchTerm, dateFilter, statusFilter]);
+  }, [searchTerm, dateFilter, statusFilter , pageNumber]);
   const fetchData = useCallback(
     async (queries) => {
       try {
         setisLoading(true);
         seterror("");
-        const fetchedData = await databaseService.listDocuments(queries);
-        if (queries.length === 0) {
+        const fetchedDataPromise = databaseService.listDocuments(queries);
+        const totalDataPromise = databaseService.listDocuments([
+          ...queries,
+          Query.limit(1000),
+        ]);
+        const [fetchedData, totalData] = await Promise.all([
+          fetchedDataPromise,
+          totalDataPromise,
+        ]);
+        setTotalJobs(totalData.length);
+        if (queries.length === 1) {
           dispatch(addJobs(fetchedData));
         }
         setallJobs(fetchedData);
@@ -64,7 +84,7 @@ function JobTable() {
   useEffect(() => {
     const timeout = setTimeout(() => {
       const queries = buildQueries();
-      if (queries.length === 0 && storeAllJobs != null) {
+      if (queries.length === 1 && storeAllJobs != null) {
         setallJobs(storeAllJobs);
       } else {
         fetchData();
@@ -253,18 +273,42 @@ function JobTable() {
         </div>
         {isLoading ? (
           <div className="flex justify-center items-center py-60">
-            <Loader2 className="text-indigo-600 animate-spin w-10 h-10 "/>
+            <Loader2 className="text-indigo-600 animate-spin w-10 h-10 " />
           </div>
         ) : error ? (
           <div className="py-60 flex justify-center items-center">
-            <p className="text-red-500 hover:text-red-400 font-semibold">{error}</p>
+            <p className="text-red-500 hover:text-red-400 font-semibold">
+              {error}
+            </p>
           </div>
         ) : (
           allJobs.map((eachJob) => (
             <JobItem data={eachJob} key={eachJob.CompanyName}></JobItem>
           ))
         )}
+        <p className="h-px my-2 w-full bg-gray-400"></p>
         {/* pagination logic */}
+        <div className="w-full px-6 py-2 flex items-center justify-end">
+          <div className="rounded-lg border border-indigo-700 flex items-center space-x-0 overflow-hidden">
+            <ChevronLeft
+              className="size-8 p-2 hover:bg-indigo-200 disabled:bg-indigo-300"
+              onClick={() => {
+                setpageNumber(pageNumber - 1);
+              }}
+              disabled={pageNumber === 1}
+            />
+            <div className="size-8 p-2 bg-indigo-500 text-white flex items-center justify-center">
+              <p>{pageNumber}</p>
+            </div>
+            <ChevronRight
+              className="size-8 p-2 hover:bg-indigo-200 disabled:bg-indigo-900"
+              onClick={() => {
+                setpageNumber(pageNumber+1);
+              }}
+             disabled={Math.ceil(totalJobs / 25) === pageNumber}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
