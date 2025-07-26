@@ -12,7 +12,7 @@ function DashboardCard({ data, label }) {
     >
       <div className="w-full flex items-center justify-between">
         <p className="font-semibold tracking-wide text-xl">{label}</p>
-        <div className="p-2 rounded-full group-hover:bg-indigo-100 transition ">
+        <div className="p-2 rounded-full group-hover:bg-indigo-100 transition duration-700 ">
           <AlignEndHorizontal/>
         </div>
       </div>
