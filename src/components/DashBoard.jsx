@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { databaseService } from "../appwrite/databaseService";
 import { Query } from "appwrite";
 import {addInterviewCount , addOfferCount , addRejectedCount , addTotalAppliedCount , addPastWeekData} from '../store/JobsSlice'
+import {DashboardCard} from './index'
 function DashBoard() {
   const inStore = useSelector((state) => state.interviewCount);
   let totalAppliedCount, interviewCount, offerCount, rejectedCount,pastWeekData;
@@ -74,7 +75,14 @@ function DashBoard() {
         <LayoutDashboard className="size-5 mr-2" />
         Dashboard
       </div>
-      <div className="w-full p-3 bg-indigo-50 rounded-xl mt-2">.</div>
+      <div className="w-full p-3 bg-indigo-50 rounded-xl mt-2">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
+              <DashboardCard label="Total Applied" data={totalAppliedCount}/>
+              <DashboardCard label="Selected" data={offerCount}/>
+              <DashboardCard label="Rejected" data={rejectedCount} />
+              <DashboardCard label="Interview" data={interviewCount} />
+          </div>
+      </div>
     </div>
   );
 }
