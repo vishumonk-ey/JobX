@@ -10,15 +10,22 @@ import {
   addTotalAppliedCount,
   addPastWeekData,
 } from "../store/JobsSlice";
-import { DashboardCard , Piechart , Graph } from "./index";
+import { DashboardCard, Piechart, Graph } from "./index";
 // import { Select } from "@headlessui/react";
 function DashBoard() {
   const inStore = useSelector((state) => state.interviewCount);
-  let totalAppliedCount,
-    interviewCount,
-    offerCount,
-    rejectedCount,
-    pastWeekData;
+  console.log("re-re nder");
+
+  // let totalAppliedCount,
+  //   interviewCount,
+  //   offerCount,
+  //   rejectedCount,
+  //   pastWeekData;
+  const [totalAppliedCount, settotalAppliedCount] = useState();
+  const [interviewCount, setinterviewCount] = useState();
+  const [rejectedCount, setrejectedCount] = useState();
+  const [pastWeekData, setpastWeekData] = useState();
+  const [offerCount, setofferCount] = useState();
   const interviewCountinStore = useSelector((state) => state.interviewCount);
   const totalAppliedCountinStore = useSelector(
     (state) => state.totalAppliedCount
@@ -42,8 +49,8 @@ function DashBoard() {
         Query.limit(1000000),
       ]);
       // for previousWeek data
-      const endDate = new Date().toISOString();
-      const startDate = new Date();
+      let endDate = new Date().toISOString();
+      let startDate = new Date();
       startDate.setDate(startDate.getDate() - 7);
       startDate.setHours(0, 0, 0, 0);
       startDate = startDate.toISOString();
@@ -59,11 +66,11 @@ function DashBoard() {
           offerPromise,
           pastWeekDataPromise,
         ]);
-      totalAppliedCount = totalApplied.length;
-      interviewCount = interview.length;
-      rejectedCount = rejected.length;
-      offerCount = offer.length;
-      pastWeekData = pastWeekDataDB;
+      settotalAppliedCount(totalApplied.length);
+      setinterviewCount(interview.length);
+      setrejectedCount(rejected.length);
+      setofferCount(offer.length);
+      setpastWeekData(pastWeekDataDB);
       dispatch(addOfferCount(offerCount));
       dispatch(addInterviewCount(interviewCount));
       dispatch(addRejectedCount(rejectedCount));
@@ -74,18 +81,49 @@ function DashBoard() {
       console.log("error", error);
     }
   }, []);
-  const pieChartData = useMemo(()=>{
-    
-  } , [])
+  const pieChartData = useMemo(() => {
+    const data = [
+      { status: "Total Applied", value: totalAppliedCount },
+      { status: "Offer", value: offerCount },
+      { status: "Interview", value: interviewCount },
+      { status: "Rejected", value: rejectedCount },
+    ];
+    return data;
+  }, [totalAppliedCount, interviewCount, offerCount, rejectedCount]);
+  const graphData = useMemo(() => {
+    const map = new Map();
+    let startDate = new Date();
+    startDate = startDate.setDate(startDate.getDate() - 7);
+    for (let i = 0; i < pastWeekData.length; i++) {
+      if (
+        pastWeekData[i].appliedAt >= startDate &&
+        pastWeekData[i].appliedAt <= startDate + 7
+      ) {
+        map.set(
+          pastWeekData[i].appliedAt,
+          (map.get(pastWeekData[i].appliedAt) || 0) + 1
+        );
+      }
+    }
+    let arr = []
+    for (const [key,value] of Object.entries(map)) {
+      arr.push({
+        date : key ,
+        count : value
+      })
+    }
+    return arr
+  }, [pastWeekData]);
   useEffect(() => {
     if (!inStore) {
       fetchData();
     } else {
       // take from store
-      interviewCount = interviewCountinStore;
-      totalAppliedCount = totalAppliedCountinStore;
-      offerCount = offerCountinStore;
-      rejectedCount = rejectedCountinStore;
+      setinterviewCount(interviewCountinStore);
+      settotalAppliedCount(totalAppliedCountinStore);
+      setofferCount(offerCountinStore);
+      setrejectedCount(rejectedCountinStore);
+      setpastWeekData(pastWeekDatainStore);
     }
   }, [fetchData]);
   const [showPiechart, setshowPiechart] = useState(true);
@@ -118,20 +156,14 @@ function DashBoard() {
                   setshowPiechart(e.target.value);
                 }}
               >
-                <option value="Graph">
-                  Graph
-                </option>
+                <option value="Graph">Graph</option>
                 <option value="Piechart">Piechart</option>
               </select>
             </div>
           </div>
-          {showPiechart ? (
-            <Piechart/>
-          ): (<Graph/>)}
+          {showPiechart ? <Piechart data={pieChartData} /> : <Graph data={graphData} />}
         </div>
-        <div className="md:flex-[30%]">
-
-        </div>
+        <div className="md:flex-[30%]"></div>
       </div>
     </div>
   );

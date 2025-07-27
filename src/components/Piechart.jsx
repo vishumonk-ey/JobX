@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { Pie, ResponsiveContainer, Sector, Tooltip } from "recharts";
+import { Pie, ResponsiveContainer, Sector, Tooltip , Cell , PieChart} from "recharts";
 
 function Piechart({ data }) {
+  // console.log(data);
+  
   const COLORS = ["#34D399", "#60A5FA", "#FBBF24", "#F87171"];
   const renderActiveShape = (props) => {
     const {
@@ -43,7 +45,7 @@ function Piechart({ data }) {
   const [activeIndex ,setactiveIndex] = useState(0)
   return (
     <ResponsiveContainer width="100%" height={400}>
-      <Piechart>
+      <PieChart>
         <Pie
           dataKey="value"
           activeIndex = {activeIndex}
@@ -61,9 +63,9 @@ function Piechart({ data }) {
         </Pie>
         <Tooltip 
             contentStyle={{borderRadius : '8px'}}
-            formatter={(value , status)=>[`${value}` ,`${status}`]}
+            formatter={(value , status)=>[`Count : ${value}` ,`Status : ${status}`]}
         />
-      </Piechart>
+      </PieChart>
     </ResponsiveContainer>
   );
 }
