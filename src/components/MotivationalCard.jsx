@@ -19,7 +19,7 @@ function MotivationalCard() {
         "If it’s meant for you, it won’t pass you by.",
       ];
   return (
-    <div className='w-full rounded-xl p-4 shadow-lg bg-gradient-to-br from-teal-100 via-teal-200 to-teal-300 hover:shadow-xl border border-teal-300/50'>
+    <div className='w-full rounded-xl px-4 py-10 shadow-lg bg-gradient-to-br from-teal-100 via-teal-200 to-teal-300 hover:shadow-xl border border-teal-300/50'>
         <div className='text-left font-semibold text-white text-xl'>{motivationalQuotes[Math.ceil(Math.random()*motivationalQuotes.length)]}</div>
     </div>
   )

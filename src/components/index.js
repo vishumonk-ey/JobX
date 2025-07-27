@@ -6,6 +6,7 @@ import Login from "./Login"
 import DashboardCard from "./DashboardCard"
 import Piechart from "./Piechart"
 import Graph from "./Graph"
+import MotivationalCard from "./MotivationalCard"
 
 export {
     Input ,
@@ -15,6 +16,7 @@ export {
     Login ,
     DashboardCard ,
     Piechart ,
-    Graph
+    Graph ,
+    MotivationalCard
 
 }

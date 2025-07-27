@@ -10,7 +10,7 @@ import {
   addTotalAppliedCount,
   addPastWeekData,
 } from "../store/JobsSlice";
-import { DashboardCard, Piechart, Graph } from "./index";
+import { DashboardCard, Piechart, Graph , MotivationalCard} from "./index";
 // import { Select } from "@headlessui/react";
 function DashBoard() {
   const inStore = useSelector((state) => state.interviewCount);
@@ -24,7 +24,7 @@ function DashBoard() {
   const [totalAppliedCount, settotalAppliedCount] = useState();
   const [interviewCount, setinterviewCount] = useState();
   const [rejectedCount, setrejectedCount] = useState();
-  const [pastWeekData, setpastWeekData] = useState();
+  const [pastWeekData, setpastWeekData] = useState([]);
   const [offerCount, setofferCount] = useState();
   const interviewCountinStore = useSelector((state) => state.interviewCount);
   const totalAppliedCountinStore = useSelector(
@@ -93,7 +93,8 @@ function DashBoard() {
   const graphData = useMemo(() => {
     const map = new Map();
     let startDate = new Date();
-    startDate = startDate.setDate(startDate.getDate() - 7);
+    startDate.setDate(startDate.getDate() - 7);
+    startDate = startDate.getDate()
     for (let i = 0; i < pastWeekData.length; i++) {
       if (
         pastWeekData[i].appliedAt >= startDate &&
@@ -114,6 +115,7 @@ function DashBoard() {
     }
     return arr
   }, [pastWeekData]);
+  // which will run first , as piechartData depends upon 
   useEffect(() => {
     if (!inStore) {
       fetchData();
@@ -163,7 +165,9 @@ function DashBoard() {
           </div>
           {showPiechart ? <Piechart data={pieChartData} /> : <Graph data={graphData} />}
         </div>
-        <div className="md:flex-[30%]"></div>
+        <div className="md:flex-[30%] md:h-full">
+              <MotivationalCard/>  
+        </div>
       </div>
     </div>
   );
