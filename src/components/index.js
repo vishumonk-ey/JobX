@@ -7,6 +7,7 @@ import DashboardCard from "./DashboardCard"
 import Piechart from "./Piechart"
 import Graph from "./Graph"
 import MotivationalCard from "./MotivationalCard"
+// import Postform from "../components/PostForm"
 
 export {
     Input ,
@@ -17,6 +18,7 @@ export {
     DashboardCard ,
     Piechart ,
     Graph ,
-    MotivationalCard
+    MotivationalCard ,
+    
 
 }
