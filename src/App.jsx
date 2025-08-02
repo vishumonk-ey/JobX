@@ -12,6 +12,7 @@ import JobTable from "./components/JobTable";
 import DashBoard from "./components/DashBoard";
 import PostForm from "./components/Postform";
 import { BellRing } from "lucide-react";
+import { JobPage } from "./components/index";
 function App() {
   const [count, setCount] = useState(0);
 
@@ -19,7 +20,7 @@ function App() {
     <div className="w-full ">
       {/* <Login/> */}
       {/* <JobItem/> */}
-      <Input icon={<BellRing className="w-5 h-4"/>} label="input"/>
+      <JobPage />
     </div>
   );
 }

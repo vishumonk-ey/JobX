@@ -20,58 +20,58 @@ class DataBaseService {
           Permission.write(Role.user(data.AuthorId)),
         ]
       );
-      return document
+      return document;
     } catch (error) {
-        throw error
+      throw error;
     }
   }
-  async getDocument(documentId){
+  async getDocument(documentId) {
     try {
-        const document = await this.database.getDocument(
-            config.appwriteDatabaseId ,
-            config.appwriteCollectionId ,
-            documentId
-        )
+      const document = await this.database.getDocument(
+        config.appwriteDatabaseId,
+        config.appwriteCollectionId,
+        documentId
+      );
     } catch (error) {
-        throw error
+      throw error;
     }
   }
-  async listDocuments(filterArr){
+  async listDocuments(filterArr) {
     try {
-        const allDocuments = this.database.listDocuments(
-            config.appwriteDatabaseId ,
-            config.appwriteCollectionId ,
-            filterArr
-        )
-        return allDocuments
+      const allDocuments = this.database.listDocuments(
+        config.appwriteDatabaseId,
+        config.appwriteCollectionId,
+        filterArr
+      );
+      return allDocuments;
     } catch (error) {
-        throw error
+      throw error;
     }
   }
-  async updateDocument(data,documentId){
+  async updateDocument(data, documentId) {
     try {
-        const result = await this.database.updateDocument(
-            config.appwriteDatabaseId ,
-            config.appwriteCollectionId ,
-            documentId ,
-            data
-        )
-        return result
+      const result = await this.database.updateDocument(
+        config.appwriteDatabaseId,
+        config.appwriteCollectionId,
+        documentId,
+        data
+      );
+      return result;
     } catch (error) {
-        throw error
+      throw error;
     }
   }
-  async deleteDocument(documentId){
+  async deleteDocument(documentId) {
     try {
-        const result = await this.database.deleteDocument(
-            config.appwriteDatabaseId ,
-            config.appwriteCollectionId ,
-            documentId
-        )
-        return result
+      const result = await this.database.deleteDocument(
+        config.appwriteDatabaseId,
+        config.appwriteCollectionId,
+        documentId
+      );
+      return result;
     } catch (error) {
-       throw error 
+      throw error;
     }
   }
 }
-export const databaseService = new DataBaseService()
+export const databaseService = new DataBaseService();
