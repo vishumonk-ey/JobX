@@ -1,0 +1,38 @@
+import React, { useEffect, useState } from "react";
+import { useLocation, useParams } from "react-router-dom";
+import { databaseService } from "../appwrite/databaseService";
+import Postform from "../components/Postform";
+
+function EditPage() {
+  const { slug } = useParams();
+  const location = useLocation();
+  const [jobData, setjobData] = useState();
+  const [isLoading, setisLoading] = useState(true);
+  const fetchData = async () => {
+    try {
+      if (location.state) {
+        setjobData(location.state);
+      } else {
+        const data = await databaseService.getDocument(slug);
+        setjobData(data);
+      }
+    } catch (error) {
+      console.log("error while fetching", error);
+    } finally {
+      setisLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+  return isLoading ? (
+    <div className="w-full flex-col gap-2 justify-center items-center">
+      <LoaderCircle className="animate-spin size-3" />
+      <p className="font-semibold">Loading...</p>
+    </div>
+  ) : (
+    <Postform JobData={jobData} />
+  );
+}
+
+export default EditPage;

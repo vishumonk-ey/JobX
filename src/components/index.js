@@ -8,6 +8,9 @@ import Piechart from "./Piechart"
 import Graph from "./Graph"
 import MotivationalCard from "./MotivationalCard"
 import JobPage from "./JobPage"
+import JobTable from "./JobTable"
+import PostForm from './PostForm'
+import DashBoard from './DashBoard'
 // import Postform from "../components/PostForm"
 
 export {
@@ -20,6 +23,9 @@ export {
     Piechart ,
     Graph ,
     MotivationalCard ,
-    JobPage
+    JobPage ,
+    JobTable ,
+    PostForm ,
+    DashBoard
 
 }
