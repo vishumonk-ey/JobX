@@ -7,15 +7,62 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import store from "./store/store.js";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { GlobalStyles } from "@mui/material";
+import { AuthLayout, DashboardPage, EditPage, HomePage, Login, SignupPage, ViewPage } from "./components/index.js";
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     children: [
-      // {
-      //   path:'/' ,
-      //   element : <Home/>
-      // } ,
+      {
+        path: "/",
+        element: (
+          <AuthLayout isRequired={true}>
+            <HomePage />
+          </AuthLayout>
+        ),
+      },
+      {
+        path : "/view-page/:slug",
+        element : (
+          <AuthLayout isRequired={true}>
+            <ViewPage/>
+          </AuthLayout>
+        )
+      } ,
+      {
+        path : "/edit-page/:slug",
+        element : (
+          <AuthLayout isRequired={true}>
+            <EditPage/>
+          </AuthLayout>
+        )
+      } ,
+      {
+        path : "/add-page",
+        element : (
+          <AuthLayout isRequired={true}>
+            <EditPage/>
+          </AuthLayout>
+        )
+      } ,
+      {
+        path : "/login",
+        element : (
+          <AuthLayout>
+            <Login/>
+          </AuthLayout>
+        )
+      } ,
+      {
+        path : "/dashboard",
+        element : (
+          <AuthLayout isRequired={true}>
+            <DashboardPage/>
+          </AuthLayout>
+        )
+      } ,
+      
+      
     ],
   },
 ]);

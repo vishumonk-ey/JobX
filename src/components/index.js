@@ -11,6 +11,14 @@ import JobPage from "./JobPage"
 import JobTable from "./JobTable"
 import PostForm from './PostForm'
 import DashBoard from './DashBoard'
+import HomePage from '../pages/Home'
+import AuthLayout from './AuthLayout'
+import ViewPage from '../pages/ViewPage'
+import EditPage from '../pages/EditPage'
+import AddJobPage from '../pages/AddJobPage'
+import SignupPage from '../pages/SignUp'
+import LoginPage from '../pages/LoginPage'
+import DashboardPage from '../pages/DashboardPage'
 // import Postform from "../components/PostForm"
 
 export {
@@ -26,6 +34,13 @@ export {
     JobPage ,
     JobTable ,
     PostForm ,
-    DashBoard
-
+    DashBoard ,
+    HomePage ,
+    AuthLayout ,
+    EditPage,
+    ViewPage ,
+    AddJobPage , 
+    LoginPage ,
+    SignupPage ,
+    DashboardPage
 }

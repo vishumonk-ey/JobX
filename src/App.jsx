@@ -10,18 +10,15 @@ import Footer from "./components/footer/Footer";
 import JobItem from "./components/JobItem";
 import JobTable from "./components/JobTable";
 import DashBoard from "./components/DashBoard";
-import PostForm from "./components/Postform";
 import { BellRing } from "lucide-react";
 import { JobPage } from "./components/index";
+import { Outlet } from "react-router-dom";
 function App() {
   const [count, setCount] = useState(0);
-
   return (
-    <div className="w-full ">
-      {/* <Login/> */}
-      {/* <JobItem/> */}
-      <JobPage />
-    </div>
+    <Header/>
+    <Outlet/>
+
   );
 }
 

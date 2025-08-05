@@ -112,7 +112,7 @@ function JobItem({ data }) {
                   className="w-48 bg-white rounded-xl shadow-xl border border-gray-100 p-2 z-50 animate-slide-from-right duration-200"
                 >
                   <div className="space-y-1">
-                    <Link to="/view-details" className="block">
+                    <Link to={`/view-page/${data.$id}`} className="block">
                       <div className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 transition-all duration-200 group">
                         <Eye className="w-4 h-4 text-blue-600 group-hover:scale-110 transition-transform" />
                         <span className="text-sm font-medium text-gray-700 group-hover:text-blue-700">
@@ -121,7 +121,7 @@ function JobItem({ data }) {
                       </div>
                     </Link>
 
-                    <Link to="/edit" className="block">
+                    <Link to={`/edit-page/${data.$id}`} className="block">
                       <div className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-green-50 transition-all duration-200 group">
                         <Edit3 className="w-4 h-4 text-green-600 group-hover:scale-110 transition-transform" />
                         <span className="text-sm font-medium text-gray-700 group-hover:text-green-700">
