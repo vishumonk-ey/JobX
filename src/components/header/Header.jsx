@@ -203,7 +203,7 @@ function Header() {
         className={
           isMenuOpen
             ? "fixed left-0 top-0 bottom-0 right-0 opacity-100 transition duration-300 translate-x-0 bg-white"
-            : "-translate-x-10 opacity-0 transition duration-300"
+            : "-translate-x-10 opacity-0 transition duration-300 hidden"
         }
       >
         <div className="p-6">

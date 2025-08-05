@@ -1,9 +1,11 @@
-import React from 'react'
-import {Login} from '../components/index'
+import React from "react";
+import { Login } from "../components/index";
 function LoginPage() {
   return (
-    <Login/>
-  )
+    <div className="w-full py-3">
+      <Login />
+    </div>
+  );
 }
 
-export default LoginPage
+export default LoginPage;

@@ -43,7 +43,7 @@ function Login() {
                 </span>
               </Link>
             </p>
-            <form onSubmit={handleSubmit(LoginHandler)} className="mt-4">
+            <form onSubmit={handleSubmit(LoginHandler)} className="mt-4 w-full">
               {error && (<p className="text-red-400 mb-1">{error.message}</p>)}
               {/* <div className="w-full">
                 <Input

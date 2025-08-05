@@ -1,9 +1,11 @@
-import React from 'react'
-import {Signup} from '../components/index'
+import React from "react";
+import { Signup } from "../components/index";
 function SignUp() {
   return (
-    <Signup/>
-  )
+    <div className="w-full py-3">
+      <Signup />
+    </div>
+  );
 }
 
-export default SignUp
+export default SignUp;

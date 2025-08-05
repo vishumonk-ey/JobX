@@ -14,10 +14,14 @@ import { BellRing } from "lucide-react";
 import { JobPage } from "./components/index";
 import { Outlet } from "react-router-dom";
 function App() {
-  const [count, setCount] = useState(0);
+  // const [count, setCount] = useState(0);
   return (
-    <Header/>
-    <Outlet/>
+    <div>
+      <Header/>
+      <Outlet/>
+      <Footer/>
+    </div>
+    
 
   );
 }
