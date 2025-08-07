@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Input, Button } from "../components/index";
-import {  } from "lucide-react";
+import {} from "lucide-react";
 import { databaseService } from "../appwrite/databaseService";
 import { useNavigate } from "react-router-dom";
 function Postform({ JobData }) {
@@ -55,20 +55,32 @@ function Postform({ JobData }) {
     }
   };
   const [isModalOpen, setisModalOpen] = useState(false);
+  console.log("modal", isModalOpen);
+
   const selectOptions = ["Applied", "Interview", "Rejected", "Offer"];
   return (
-    <div className="w-full mx-auto relative ">
-      <div className={`w-full max-w-[700px] p-2 `+ isModalOpen ? "blur-lg overflow-hidden pointer-events-none " : "" }>
-        <h1 className="text-4xl">
+    <div className="w-full mx-auto relative p-10 ">
+      <div
+        className={
+          isModalOpen
+            ? `w-full max-w-[700px] p-2 blur-lg overflow-hidden pointer-events-none mx-auto `
+            : `w-full max-w-[700px] p-2 mx-auto`
+        }
+      >
+        <h1 className="text-4xl font-bold">
           {JobData ? "Edit Application" : " New Application"}
         </h1>
         {JobData ? null : (
-          <p className="mt-2 text-gray-400">
+          <p className="mt-2 font-semibold
+           text-gray-700">
             Add a new job application to track !
           </p>
         )}
-        <form className="mt-4 space-y-2" onSubmit={handleSubmit(onSubmithandler())}>
-          <div className="w-full flex flex-wrap items-center gap-3">
+        <form
+          className="mt-10 space-y-5"
+          onSubmit={handleSubmit(onSubmithandler)}
+        >
+          <div className="w-full flex flex-wrap items-center gap-5">
             <div className="flex-1 min-w-[200px]">
               <Input
                 label="Company Name*"
@@ -92,13 +104,13 @@ function Postform({ JobData }) {
               )}
             </div>
           </div>
-          <div className="w-full flex flex-wrap items-center gap-3">
+          <div className="w-full flex flex-wrap items-center gap-5">
             <div className="flex-1 min-w-[200px]">
-              <label htmlFor="" className="inline-block">
-                Status
+              <label htmlFor="" className="inline-block text-[#22223b] font-semibold">
+                Status* : 
               </label>
               <select
-                className="rounded-lg border border-gray-300"
+                className="rounded-lg border border-gray-300 ml-2 px-3 py-1"
                 {...register("Status", {
                   required: true,
                 })}
@@ -113,7 +125,7 @@ function Postform({ JobData }) {
             <div className="flex-1 min-w-[200px]">
               <Input
                 label="Date Applied*"
-                placeholder="DD-MM-YYYY"
+                placeholder=""
                 type="date"
                 {...register("DateApplied", { required: true })}
               />
@@ -124,7 +136,7 @@ function Postform({ JobData }) {
               )}
             </div>
           </div>
-          <div className="w-full flex flex-wrap items-center gap-3">
+          <div className="w-full flex flex-wrap items-center gap-5">
             <div className="flex-1 min-w-[200px]">
               <Input
                 label="Location"
@@ -148,7 +160,7 @@ function Postform({ JobData }) {
               )}
             </div>
           </div>
-          <div className="w-full flex flex-wrap items-center gap-3">
+          <div className="w-full flex flex-wrap items-center gap-5">
             <div className="flex-1 min-w-[200px]">
               <Input
                 label="Application Link"
@@ -174,6 +186,7 @@ function Postform({ JobData }) {
             <Input
               label="Notes"
               placeholder="Add any notes about this application , interview feedback or next steps ..."
+              className = "pt-2 pb-16"
               {...register("Notes")}
             ></Input>
           </div>
