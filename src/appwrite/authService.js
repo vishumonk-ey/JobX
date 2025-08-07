@@ -1,7 +1,9 @@
 import { Account, Client, ID, OAuthProvider } from "appwrite";
 import { config } from "../assets/config";
 class Auth {
-  client = new Client().setProject(config.appwriteProjectId);
+  client = new Client()
+    .setEndpoint(config.appwriteEndpoint)
+    .setProject(config.appwriteProjectId);
   account;
   constructor() {
     this.account = new Account(this.client);
@@ -15,20 +17,28 @@ class Auth {
         name
       );
       if (promise) {
-        return this.Login(email, password);
+        const sessionObject = await this.Login({email, password});
+        console.log("return value after appwrite login : ",sessionObject);
+        return sessionObject
       }
     } catch (error) {
+      console.log("error in appwrite signup :",error);
       throw error;
     }
   }
   async Login({ email, password }) {
     try {
+      console.log("email , pass" , email , password);
+      
       const sessionObject = await this.account.createEmailPasswordSession(
         email,
         password
       );
+      console.log("sessObj" ,sessionObject);
+      
       return sessionObject;
     } catch (error) {
+      console.log("error in logging in: ",error)
       throw error;
     }
   }
@@ -55,28 +65,27 @@ class Auth {
       "back to login ***********"
     );
   }
-  async getCurrentUser(){
+  async getCurrentUser() {
     try {
-        const promise = await this.account.get()
-        return promise
+      const promise = await this.account.get();
+      return promise;
     } catch (error) {
-        throw error
+      throw error;
     }
   }
-  async createRecovery({email}){
+  async createRecovery({ email }) {
     try {
-        this.account.createRecovery(email,"password-reset-page-link*******")
+      this.account.createRecovery(email, "password-reset-page-link*******");
     } catch (error) {
-        throw error
+      throw error;
     }
   }
-  async updatePassword({email,secretKey , password}){
+  async updatePassword({ email, secretKey, password }) {
     try {
-        this.account.updateRecovery(email,secretKey , password)
+      this.account.updateRecovery(email, secretKey, password);
     } catch (error) {
-        throw error
+      throw error;
     }
   }
 }
-export const authService = new Auth()
-
+export const authService = new Auth();

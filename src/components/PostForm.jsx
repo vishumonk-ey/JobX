@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Input, Button } from "../components/index";
-import { Circle } from "lucide-react";
+import {  } from "lucide-react";
 import { databaseService } from "../appwrite/databaseService";
 import { useNavigate } from "react-router-dom";
 function Postform({ JobData }) {
@@ -97,7 +97,7 @@ function Postform({ JobData }) {
               <label htmlFor="" className="inline-block">
                 Status
               </label>
-              <Select
+              <select
                 className="rounded-lg border border-gray-300"
                 {...register("Status", {
                   required: true,
@@ -108,7 +108,7 @@ function Postform({ JobData }) {
                     {eachItem}
                   </option>
                 ))}
-              </Select>
+              </select>
             </div>
             <div className="flex-1 min-w-[200px]">
               <Input

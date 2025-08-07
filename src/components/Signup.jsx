@@ -21,6 +21,8 @@ function Signup() {
   const [error, setError] = useState();
   async function SignupHandler(data) {
     try {
+      console.log("data:", data);
+      
       const userData = await authService.Signup(data);
       if (userData) {
         // add userData in the store

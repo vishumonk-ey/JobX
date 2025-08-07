@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { databaseService } from "../appwrite/databaseService";
-import Postform from "../components/Postform";
-
+// import Postform from "../components/Postform";
+import {PostForm} from '../components/index'
+import {LoaderCircle} from 'lucide-react'
 function EditPage() {
   const { slug } = useParams();
   const location = useLocation();
@@ -31,7 +32,7 @@ function EditPage() {
       <p className="font-semibold">Loading...</p>
     </div>
   ) : (
-    <Postform JobData={jobData} />
+    <PostForm JobData={jobData} />
   );
 }
 

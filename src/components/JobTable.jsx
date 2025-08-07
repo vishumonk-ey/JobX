@@ -111,7 +111,7 @@ function JobTable() {
         </div>
         <div className="flex items-center space-x-3">
           <Link
-            to="/add-job"
+            to="/add-page"
             className="w-full rounded-lg md:w-fit px-3 py-2 bg-indigo-300 hover:bg-indigo-500 text-white flex items-center focus:ring focus:ring-indigo-700"
           >
             <Plus className="w-5 h-5" />

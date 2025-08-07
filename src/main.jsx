@@ -7,7 +7,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import store from "./store/store.js";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { GlobalStyles } from "@mui/material";
-import { AuthLayout, DashboardPage, EditPage, HomePage, LoginPage, SignupPage, ViewPage } from "./components/index.js";
+import { AddJobPage, AuthLayout, DashboardPage, EditPage, HomePage, LoginPage, SignupPage, ViewPage } from "./components/index.js";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -41,7 +41,7 @@ const router = createBrowserRouter([
         path : "/add-page",
         element : (
           <AuthLayout isRequired={true}>
-            <EditPage/>
+            <AddJobPage/>
           </AuthLayout>
         )
       } ,
