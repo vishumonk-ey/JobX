@@ -1,25 +1,38 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Input, Button } from "../components/index";
-import {} from "lucide-react";
+import { CheckCheckIcon, CheckIcon, ChevronDown } from "lucide-react";
+import clsx from 'clsx'
 import { databaseService } from "../appwrite/databaseService";
 import { useNavigate } from "react-router-dom";
+import {
+  Listbox,
+  ListboxButton,
+  ListboxOption,
+  ListboxOptions,
+} from "@headlessui/react";
 function Postform({ JobData }) {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({
-    CompanyName: JobData?.CompanyName || "",
-    Role: JobData?.Role || "",
-    Status: JobData?.Status || "Applied",
-    DateApplied: JobData?.DateApplied || "",
-    Location: JobData?.Location || "",
-    Salary: JobData?.Salary || "",
-    Link: JobData?.Link || "",
-    AppliedBy: JobData?.AppliedBy || "",
-    Notes: JobData?.Notes || "",
+    defaultValues: {
+      CompanyName: JobData?.CompanyName || "",
+      Role: JobData?.Role || "",
+      Status: JobData?.Status || "Applied",
+      DateApplied: JobData?.DateApplied || "",
+      Location: JobData?.Location || "",
+      Salary: JobData?.Salary || "",
+      Link: JobData?.Link || "",
+      AppliedBy: JobData?.AppliedBy || "",
+      Notes: JobData?.Notes || "",
+    },
   });
+  const [selectedStatus , setselectedStatus] = useState(
+    JobData?.status || "Applied"
+  )
   const [error, setError] = useState();
   const navigate = useNavigate();
   const onSubmithandler = async (data) => {
@@ -56,7 +69,7 @@ function Postform({ JobData }) {
   };
   const [isModalOpen, setisModalOpen] = useState(false);
   console.log("modal", isModalOpen);
-
+  console.log("error object : ", errors)
   const selectOptions = ["Applied", "Interview", "Rejected", "Offer"];
   return (
     <div className="w-full mx-auto relative p-10 ">
@@ -71,8 +84,10 @@ function Postform({ JobData }) {
           {JobData ? "Edit Application" : " New Application"}
         </h1>
         {JobData ? null : (
-          <p className="mt-2 font-semibold
-           text-gray-700">
+          <p
+            className="mt-2 font-semibold
+           text-gray-700"
+          >
             Add a new job application to track !
           </p>
         )}
@@ -89,7 +104,7 @@ function Postform({ JobData }) {
               />
               {errors.CompanyName && (
                 <p className="text-red-400 text-sm mt-1">
-                  {errors.CompanyName}
+                  {errors.CompanyName.message}
                 </p>
               )}
             </div>
@@ -100,27 +115,61 @@ function Postform({ JobData }) {
                 {...register("Role", { required: true })}
               />
               {errors.Role && (
-                <p className="text-red-400 text-sm mt-1">{errors.Role}</p>
+                <p className="text-red-400 text-sm mt-1">{errors.Role.message}</p>
               )}
             </div>
           </div>
           <div className="w-full flex flex-wrap items-center gap-5">
-            <div className="flex-1 min-w-[200px]">
-              <label htmlFor="" className="inline-block text-[#22223b] font-semibold">
-                Status* : 
+            <div className="flex-1 min-w-[200px] relative">
+              <label
+                htmlFor=""
+                className="inline-block text-[#22223b] font-semibold"
+              >
+                Status* :
               </label>
-              <select
-                className="rounded-lg border border-gray-300 ml-2 px-3 py-1"
+              {/* <select
+                className="rounded-lg border border-gray-300 ml-2 px-3 py-1 bg-[#3b82f6]/40 "
                 {...register("Status", {
                   required: true,
                 })}
               >
                 {selectOptions.map((eachItem) => (
-                  <option value={eachItem} key={eachItem}>
+                  <option value={eachItem} key={eachItem} className="font-mono bg-[#3b82f6]/40">
                     {eachItem}
                   </option>
                 ))}
-              </select>
+              </select> */}
+              <Listbox value={selectedStatus} onChange={
+                (value) => {
+                  setselectedStatus(value)
+                  setValue("Status",value)
+                }
+              }>
+                <ListboxButton
+                  className=" w-full px-3 py-2 rounded-lg bg-[#3b82f6]/20 shadow-sm text-black transition-all  border-transparent
+            duration-300 cursor-pointer dark:text-white  focus-visible:ring-2 focus-visible:ring-offset-0 focus-visible:ring-blue-300 hover:border-blue-400 border outline-none flex items-center justify-between"
+                >
+                  {selectedStatus}
+                  <ChevronDown className="size-5" />
+                </ListboxButton>
+                <ListboxOptions className="absolute mt-1 z-30 w-full rounded overflow-hidden bg-white border border-gray-200 shadow-lg">
+                  {selectOptions.map((eachItem) => (
+                    <ListboxOption
+                      value={eachItem}
+                      key={eachItem}
+                      className="font-mono "
+                    >
+                      {({focus , selected}) => (
+                        <div className={clsx('flex px-2 py-1 gap-2 items-center transition cursor-pointer' , focus && 'bg-blue-400 text-white/80')}>
+                          <CheckIcon className={clsx("size-5 font-extrabold text-blue-700" , !selected && "hidden")}/>
+                          <p className={clsx(!selected && "ml-6")}>{eachItem}</p>
+                        </div>
+                      )}
+                    </ListboxOption>
+                  ))}
+                </ListboxOptions>
+                {/* library component -> controlled?uncontrolled  */}
+              </Listbox>
             </div>
             <div className="flex-1 min-w-[200px]">
               <Input
@@ -131,7 +180,7 @@ function Postform({ JobData }) {
               />
               {errors.DateApplied && (
                 <p className="text-red-400 text-sm mt-1">
-                  {errors.DateApplied}
+                  {errors.DateApplied.message}
                 </p>
               )}
             </div>
@@ -143,9 +192,9 @@ function Postform({ JobData }) {
                 placeholder="e.g Remote , Kolkata , Bangalore"
                 {...register("Location")}
               />
-              {errors.CompanyName && (
+              {errors.Location && (
                 <p className="text-red-400 text-sm mt-1">
-                  {errors.CompanyName}
+                  {errors.Location.message}
                 </p>
               )}
             </div>
@@ -156,7 +205,7 @@ function Postform({ JobData }) {
                 {...register("Salary")}
               />
               {errors.Salary && (
-                <p className="text-red-400 text-sm mt-1">{errors.Salary}</p>
+                <p className="text-red-400 text-sm mt-1">{errors.Salary.message}</p>
               )}
             </div>
           </div>
@@ -168,7 +217,7 @@ function Postform({ JobData }) {
                 {...register("Link")}
               />
               {errors.Link && (
-                <p className="text-red-400 text-sm mt-1">{errors.Link}</p>
+                <p className="text-red-400 text-sm mt-1">{errors.Link.message}</p>
               )}
             </div>
             <div className="flex-1 min-w-[200px]">
@@ -178,7 +227,7 @@ function Postform({ JobData }) {
                 {...register("AppliedBy")}
               />
               {errors.AppliedBy && (
-                <p className="text-red-400 text-sm mt-1">{errors.AppliedBy}</p>
+                <p className="text-red-400 text-sm mt-1">{errors.AppliedBy.message}</p>
               )}
             </div>
           </div>
@@ -186,7 +235,7 @@ function Postform({ JobData }) {
             <Input
               label="Notes"
               placeholder="Add any notes about this application , interview feedback or next steps ..."
-              className = "pt-2 pb-16"
+              className="pt-2 pb-16"
               {...register("Notes")}
             ></Input>
           </div>
