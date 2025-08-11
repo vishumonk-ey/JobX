@@ -12,7 +12,7 @@ import { useDispatch } from "react-redux";
 function Signup() {
   // const ref = useRef();
   const navigate = useNavigate();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -21,12 +21,12 @@ function Signup() {
   const [error, setError] = useState();
   async function SignupHandler(data) {
     try {
-      console.log("data:", data);
-      
+      // console.log("data:", data);
+
       const userData = await authService.Signup(data);
       if (userData) {
         // add userData in the store
-        dispatch(login(userData))
+        dispatch(login(userData));
         navigate("/");
       }
     } catch (error) {
@@ -35,11 +35,11 @@ function Signup() {
     }
   }
   const githubAuthHandler = () => {
-      authService.OAuthGithub()
+    authService.OAuthGithub();
   };
 
   const googleAuthHandler = () => {
-    authService.OAuthGoogle()
+    authService.OAuthGoogle();
   };
   return (
     <div className="w-full flex items-center justify-center">
@@ -55,7 +55,7 @@ function Signup() {
           </Link>
         </p>
         <form onSubmit={handleSubmit(SignupHandler)} className="mt-4 w-full">
-          {error && (<p className="text-red-400 mb-1">{error.message}</p>)}
+          {error && <p className="text-red-400 mb-1">{error.message}</p>}
           <div className="w-full">
             <Input
               type="text"
@@ -63,7 +63,7 @@ function Signup() {
               autoComplete="off"
               label="Name"
               {...register("name", {
-                required: true,
+                required: "Please enter your name",
               })}
             />
             {errors.name && (
@@ -77,7 +77,7 @@ function Signup() {
               placeholder="Email"
               autoComplete="off"
               {...register("email", {
-                required: true,
+                required: "Please enter your email address",
                 pattern: {
                   value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                   message: "Invalid email address",
@@ -99,7 +99,7 @@ function Signup() {
               type="password"
               autoComplete="off"
               {...register("password", {
-                required: true,
+                required: "Please enter your password",
                 pattern: {
                   value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/,
                   message:

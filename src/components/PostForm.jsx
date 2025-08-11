@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Input, Button } from "../components/index";
 import { CheckCheckIcon, CheckIcon, ChevronDown } from "lucide-react";
-import clsx from 'clsx'
+import clsx from "clsx";
 import { databaseService } from "../appwrite/databaseService";
 import { useNavigate } from "react-router-dom";
 import {
@@ -11,7 +11,10 @@ import {
   ListboxOption,
   ListboxOptions,
 } from "@headlessui/react";
+import { useSelector } from "react-redux";
 function Postform({ JobData }) {
+  const author = useSelector((state)=>state.auth.userData)
+  console.log(author)
   const {
     register,
     handleSubmit,
@@ -30,9 +33,9 @@ function Postform({ JobData }) {
       Notes: JobData?.Notes || "",
     },
   });
-  const [selectedStatus , setselectedStatus] = useState(
+  const [selectedStatus, setselectedStatus] = useState(
     JobData?.status || "Applied"
-  )
+  );
   const [error, setError] = useState();
   const navigate = useNavigate();
   const onSubmithandler = async (data) => {
@@ -47,7 +50,7 @@ function Postform({ JobData }) {
           navigate(`/view-page/${JobData.$id}`);
         }
       } else {
-        const isCreated = await databaseService.createDocument(data);
+        const isCreated = await databaseService.createDocument(data , author.$id);
         if (isCreated) {
           navigate(`/view-page/${isCreated.$id}`);
         }
@@ -68,8 +71,7 @@ function Postform({ JobData }) {
     }
   };
   const [isModalOpen, setisModalOpen] = useState(false);
-  console.log("modal", isModalOpen);
-  console.log("error object : ", errors)
+
   const selectOptions = ["Applied", "Interview", "Rejected", "Offer"];
   return (
     <div className="w-full mx-auto relative p-10 ">
@@ -100,7 +102,9 @@ function Postform({ JobData }) {
               <Input
                 label="Company Name*"
                 placeholder="Enter company name"
-                {...register("CompanyName", { required: true })}
+                {...register("CompanyName", {
+                  required: "Please enter the company name ",
+                })}
               />
               {errors.CompanyName && (
                 <p className="text-red-400 text-sm mt-1">
@@ -112,10 +116,12 @@ function Postform({ JobData }) {
               <Input
                 label="Job Role*"
                 placeholder="Enter company name"
-                {...register("Role", { required: true })}
+                {...register("Role", { required: "Please enter the job role" })}
               />
               {errors.Role && (
-                <p className="text-red-400 text-sm mt-1">{errors.Role.message}</p>
+                <p className="text-red-400 text-sm mt-1">
+                  {errors.Role.message}
+                </p>
               )}
             </div>
           </div>
@@ -130,7 +136,7 @@ function Postform({ JobData }) {
               {/* <select
                 className="rounded-lg border border-gray-300 ml-2 px-3 py-1 bg-[#3b82f6]/40 "
                 {...register("Status", {
-                  required: true,
+                  required: "Please select a status",
                 })}
               >
                 {selectOptions.map((eachItem) => (
@@ -139,12 +145,13 @@ function Postform({ JobData }) {
                   </option>
                 ))}
               </select> */}
-              <Listbox value={selectedStatus} onChange={
-                (value) => {
-                  setselectedStatus(value)
-                  setValue("Status",value)
-                }
-              }>
+              <Listbox
+                value={selectedStatus}
+                onChange={(value) => {
+                  setselectedStatus(value);
+                  setValue("Status", value);
+                }}
+              >
                 <ListboxButton
                   className=" w-full px-3 py-2 rounded-lg bg-[#3b82f6]/20 shadow-sm text-black transition-all  border-transparent
             duration-300 cursor-pointer dark:text-white  focus-visible:ring-2 focus-visible:ring-offset-0 focus-visible:ring-blue-300 hover:border-blue-400 border outline-none flex items-center justify-between"
@@ -159,10 +166,22 @@ function Postform({ JobData }) {
                       key={eachItem}
                       className="font-mono "
                     >
-                      {({focus , selected}) => (
-                        <div className={clsx('flex px-2 py-1 gap-2 items-center transition cursor-pointer' , focus && 'bg-blue-400 text-white/80')}>
-                          <CheckIcon className={clsx("size-5 font-extrabold text-blue-700" , !selected && "hidden")}/>
-                          <p className={clsx(!selected && "ml-6")}>{eachItem}</p>
+                      {({ focus, selected }) => (
+                        <div
+                          className={clsx(
+                            "flex px-2 py-1 gap-2 items-center transition cursor-pointer",
+                            focus && "bg-blue-400 text-white/80"
+                          )}
+                        >
+                          <CheckIcon
+                            className={clsx(
+                              "size-5 font-extrabold text-blue-700",
+                              !selected && "hidden"
+                            )}
+                          />
+                          <p className={clsx(!selected && "ml-6")}>
+                            {eachItem}
+                          </p>
                         </div>
                       )}
                     </ListboxOption>
@@ -176,7 +195,9 @@ function Postform({ JobData }) {
                 label="Date Applied*"
                 placeholder=""
                 type="date"
-                {...register("DateApplied", { required: true })}
+                {...register("DateApplied", {
+                  required: "Please select the date applied",
+                })}
               />
               {errors.DateApplied && (
                 <p className="text-red-400 text-sm mt-1">
@@ -205,7 +226,9 @@ function Postform({ JobData }) {
                 {...register("Salary")}
               />
               {errors.Salary && (
-                <p className="text-red-400 text-sm mt-1">{errors.Salary.message}</p>
+                <p className="text-red-400 text-sm mt-1">
+                  {errors.Salary.message}
+                </p>
               )}
             </div>
           </div>
@@ -217,7 +240,9 @@ function Postform({ JobData }) {
                 {...register("Link")}
               />
               {errors.Link && (
-                <p className="text-red-400 text-sm mt-1">{errors.Link.message}</p>
+                <p className="text-red-400 text-sm mt-1">
+                  {errors.Link.message}
+                </p>
               )}
             </div>
             <div className="flex-1 min-w-[200px]">
@@ -227,7 +252,9 @@ function Postform({ JobData }) {
                 {...register("AppliedBy")}
               />
               {errors.AppliedBy && (
-                <p className="text-red-400 text-sm mt-1">{errors.AppliedBy.message}</p>
+                <p className="text-red-400 text-sm mt-1">
+                  {errors.AppliedBy.message}
+                </p>
               )}
             </div>
           </div>

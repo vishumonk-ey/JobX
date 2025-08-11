@@ -1,4 +1,4 @@
-import { Client, Databases, ID, Permission } from "appwrite";
+import { Client, Databases, ID, Permission , Role } from "appwrite";
 import { config } from "../assets/config";
 class DataBaseService {
   client = new Client()
@@ -8,7 +8,7 @@ class DataBaseService {
   constructor() {
     this.database = new Databases(this.client);
   }
-  async createDocument(data) {
+  async createDocument(data  , authorId) {
     try {
       const document = await this.database.createDocument(
         config.appwriteDatabaseId,
@@ -16,8 +16,8 @@ class DataBaseService {
         ID.unique(),
         data,
         [
-          Permission.read(Role.user(data.AuthorId)),
-          Permission.write(Role.user(data.AuthorId)),
+          Permission.read(Role.user(authorId)),
+          Permission.write(Role.user(authorId)),
         ]
       );
       return document;
