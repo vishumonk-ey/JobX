@@ -14,7 +14,7 @@ import {
 import { useSelector } from "react-redux";
 function Postform({ JobData }) {
   const author = useSelector((state)=>state.auth.userData)
-  console.log(author)
+  // console.log(author)
   const {
     register,
     handleSubmit,
@@ -25,12 +25,13 @@ function Postform({ JobData }) {
       CompanyName: JobData?.CompanyName || "",
       Role: JobData?.Role || "",
       Status: JobData?.Status || "Applied",
-      DateApplied: JobData?.DateApplied || "",
+      AppliedDate: JobData?.AppliedDate || "",
       Location: JobData?.Location || "",
       Salary: JobData?.Salary || "",
       Link: JobData?.Link || "",
       AppliedBy: JobData?.AppliedBy || "",
       Notes: JobData?.Notes || "",
+      AuthorId : author.$id
     },
   });
   const [selectedStatus, setselectedStatus] = useState(
@@ -50,7 +51,10 @@ function Postform({ JobData }) {
           navigate(`/view-page/${JobData.$id}`);
         }
       } else {
-        const isCreated = await databaseService.createDocument(data , author.$id);
+        // console.log("data" , data);
+        const isCreated = await databaseService.createDocument({...data ,
+          Salary : Number(data.Salary)
+        });
         if (isCreated) {
           navigate(`/view-page/${isCreated.$id}`);
         }
@@ -195,13 +199,13 @@ function Postform({ JobData }) {
                 label="Date Applied*"
                 placeholder=""
                 type="date"
-                {...register("DateApplied", {
+                {...register("AppliedDate", {
                   required: "Please select the date applied",
                 })}
               />
-              {errors.DateApplied && (
+              {errors.AppliedDate && (
                 <p className="text-red-400 text-sm mt-1">
-                  {errors.DateApplied.message}
+                  {errors.AppliedDate.message}
                 </p>
               )}
             </div>
@@ -222,8 +226,9 @@ function Postform({ JobData }) {
             <div className="flex-1 min-w-[200px]">
               <Input
                 label="Salary Range"
-                placeholder="e.g 55k - 100k"
-                {...register("Salary")}
+                placeholder="e.g 55,000 - 1,00,000"
+                {...register("Salary"
+                )}
               />
               {errors.Salary && (
                 <p className="text-red-400 text-sm mt-1">
@@ -266,7 +271,7 @@ function Postform({ JobData }) {
               {...register("Notes")}
             ></Input>
           </div>
-          {error && <p className="text-red-400 text-sm">{error}</p>}
+          {error && <p className="text-red-400 text-sm">{error.message || "Something went wrong !"}</p>}
           <hr className="px-2" />
           <div className="w-full flex flex-col md:flex-row items-center justify-around">
             <Button type="submit">

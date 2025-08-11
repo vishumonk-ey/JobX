@@ -23,6 +23,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import { databaseService } from "../appwrite/databaseService";
 function JobPage({ data }) {
+  console.log("data transferred to jobpage", data);
+
   const navigate = useNavigate();
   const handleEdit = () => {
     navigate(`/edit/${data.$id}`, { state: { JobData: data } });
@@ -39,7 +41,9 @@ function JobPage({ data }) {
       }
     }
   };
-  const daysElapsed = Math.floor((new Date() - new Date(data.DateApplied)) / (24*60*60*60*1000))
+  const daysElapsed = Math.floor(
+    (new Date() - new Date(data.AppliedDate)) / (24 * 60 * 60 * 60 * 1000)
+  );
   return (
     <div className="w-full">
       <div className="flex items-center px-10 py-2 justify-between shadow-lg">
@@ -70,26 +74,25 @@ function JobPage({ data }) {
           </Button>
         </div>
       </div>
-      <div className="w-full mx-auto max-w-[720px] py-3 flex flex-col md:flex-row gap-3">
-        <div className="md:flex-[60%] space-y-2">
-          <div className="px-2 py-3 rounded-lg shadow space-y-2">
-            <div className="w-full flex items-center justify-between">
+      <div className="w-full mx-auto max-w-5xl py-3 flex flex-col md:flex-row gap-5">
+        <div className="md:flex-[60%] space-y-5">
+          <div className="px-5 py-3 rounded-lg shadow border border-gray-100 space-y-2">
+            <div className="w-full flex items-center justify-between ">
               <p className="text-lg">Application Status</p>
-              <PlayCircle className="text-blue-500 w-2 h-2" />
+              <PlayCircle className="text-blue-500 size-5" />
             </div>
             <div
               className={
-                `rounded-2xl bg-blue-200 border p-1 border-blue-300 text-blue-600 ` +
-                  data.status ==
-                "Rejected"
-                  ? "bg-red-200 border-red-300 text-red-6m 00"
-                  : ""
+                data.Status == "Rejected"
+                  ? "bg-red-200 border-red-300 text-red-600"
+                  : "" +
+                    `rounded-2xl px-4 w-fit bg-blue-200 border p-1 border-blue-300 text-blue-600 `
               }
             >
-              {data.status}
+              {data.Status}
             </div>
           </div>
-          <div className="px-2 py-3 rounded-lg shadow space-y-2">
+          <div className="px-2 py-3 rounded-lg shadow border border-gray-100 space-y-2">
             <p className="text-lg">Position Details</p>
             <div className="flex items-center">
               <Building2 className="w-2 h-2 text-indigo-500" />
@@ -120,7 +123,7 @@ function JobPage({ data }) {
               </div>
             </div>
           </div>
-          <div className="px-2 py-3 rounded-lg shadow space-y-2">
+          <div className="px-2 py-3 rounded-lg shadow border border-gray-100 space-y-2">
             <p className="text-lg">Application Details</p>
             <div className="flex items-center space-x-1.5">
               <ExternalLink className="w-2 h-2 text-indigo-500" />
@@ -133,24 +136,22 @@ function JobPage({ data }) {
             </div>
           </div>
           {/* notes */}
-          <div className="px-2 py-3 rounded-lg shadow space-y-2">
+          <div className="px-2 py-3 rounded-lg shadow border border-gray-100 space-y-2">
             <div className="flex items-center space-x-1">
-              <MessageSquare className="w-2 h-2 text-indigo-500"/>
+              <MessageSquare className="w-2 h-2 text-indigo-500" />
               <p className="text-lg">Notes</p>
             </div>
-            <div className="bg-gray-200 rounded-lg p-2">
-                {data.Notes}
-            </div>
+            <div className="bg-gray-200 rounded-lg p-2">{data.Notes}</div>
           </div>
         </div>
         <div className="md:flex-[40%] space-y-2">
-        <div className="px-2 py-3 rounded-lg shadow space-y-2">
-          <p className="text-lg">Application Info</p>
-          <div className="flex items-center justify-between text-sm">
+          <div className="px-2 py-3 rounded-lg shadow space-y-2">
+            <p className="text-lg">Application Info</p>
+            <div className="flex items-center justify-between text-sm">
               <p className="bg-gray-400">Days Since Applied</p>
               <p>{daysElapsed}</p>
+            </div>
           </div>
-        </div>
         </div>
       </div>
     </div>

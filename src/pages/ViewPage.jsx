@@ -10,6 +10,7 @@ function ViewPage() {
   const fetchData = async (slug) => {
     try {
       const data = await databaseService.getDocument(slug);
+      console.log("data upon fetching : " ,data);
       setjobData(data);
     } catch (error) {
       console.log("error while fetching: ", error);

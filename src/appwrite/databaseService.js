@@ -8,17 +8,17 @@ class DataBaseService {
   constructor() {
     this.database = new Databases(this.client);
   }
-  async createDocument(data  , authorId) {
+  async createDocument(data) {
     try {
       const document = await this.database.createDocument(
         config.appwriteDatabaseId,
         config.appwriteCollectionId,
         ID.unique(),
         data,
-        [
-          Permission.read(Role.user(authorId)),
-          Permission.write(Role.user(authorId)),
-        ]
+        // [
+        //   Permission.read(Role.user(authorId)),
+        //   Permission.write(Role.user(authorId)),
+        // ]
       );
       return document;
     } catch (error) {
@@ -32,6 +32,7 @@ class DataBaseService {
         config.appwriteCollectionId,
         documentId
       );
+      return document
     } catch (error) {
       throw error;
     }
