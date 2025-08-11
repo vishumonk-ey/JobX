@@ -15,6 +15,8 @@ import { useSelector } from "react-redux";
 function Postform({ JobData }) {
   const author = useSelector((state)=>state.auth.userData)
   // console.log(author)
+  console.log(JobData);
+  
   const {
     register,
     handleSubmit,
@@ -34,6 +36,7 @@ function Postform({ JobData }) {
       AuthorId : author.$id
     },
   });
+
   const [selectedStatus, setselectedStatus] = useState(
     JobData?.status || "Applied"
   );

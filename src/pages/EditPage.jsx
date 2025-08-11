@@ -12,6 +12,7 @@ function EditPage() {
   const fetchData = async () => {
     try {
       if (location.state) {
+        console.log(location.state);
         setjobData(location.state);
       } else {
         const data = await databaseService.getDocument(slug);

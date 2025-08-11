@@ -27,7 +27,7 @@ function JobPage({ data }) {
 
   const navigate = useNavigate();
   const handleEdit = () => {
-    navigate(`/edit/${data.$id}`, { state: { JobData: data } });
+    navigate(`/edit-page/${data.$id}`, { state: { JobData: data } });
   };
   const handleDelete = async () => {
     if (
@@ -48,37 +48,38 @@ function JobPage({ data }) {
     <div className="w-full">
       <div className="flex items-center px-10 py-2 justify-between shadow-lg">
         <div className="flex items-center">
-          <Link to="/" className="w-3 h-3 hover:bg-gray-400">
-            <ArrowLeft className="text-gray-700" />
+          <Link to="/" >
+            <ArrowLeft className="text-gray-700 size-8
+            hover:bg-gray-200 transition rounded-full p-1" />
           </Link>
           <p className="font-semibold text-lg md:text-xl ml-2">
             {data.CompanyName}
           </p>
         </div>
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-2">
           {/* yaha se it shouyld go to edit page , vaha pr phle fetch hoyega job data and then edit component will be rendered with jobData passed to it , vbut i already have jobData */}
           {/* TODO: in editPage first check whether url state data is present , if not then only fetch */}
 
           <Button
-            className="bg-indigo-600 hover:bg-indigo-500 text-white"
+            className="bg-indigo-600 hover:bg-indigo-500 text-white flex items-center gap-2"
             onClick={handleEdit}
           >
-            <Edit3 className="w-2 h-2" />
+            <Edit3 className="size-3" />
             Edit
           </Button>
           <Button
-            className="bg-red-500 text-white hover:bg-red-400"
+            className="bg-red-500 text-white hover:bg-red-400 flex items-center gap-2"
             onClick={handleDelete}
           >
-            <Trash2 className="w-2 h-2" /> Delete
+            <Trash2 className="size-3" /> Delete
           </Button>
         </div>
       </div>
-      <div className="w-full mx-auto max-w-5xl py-3 flex flex-col md:flex-row gap-5">
+      <div className="w-full mx-auto max-w-5xl py-3 px-2 flex flex-col md:flex-row gap-5">
         <div className="md:flex-[60%] space-y-5">
           <div className="px-5 py-3 rounded-lg shadow border border-gray-100 space-y-2">
             <div className="w-full flex items-center justify-between ">
-              <p className="text-lg">Application Status</p>
+              <p className="text-lg font-semibold">Application Status</p>
               <PlayCircle className="text-blue-500 size-5" />
             </div>
             <div
@@ -92,64 +93,72 @@ function JobPage({ data }) {
               {data.Status}
             </div>
           </div>
-          <div className="px-2 py-3 rounded-lg shadow border border-gray-100 space-y-2">
-            <p className="text-lg">Position Details</p>
-            <div className="flex items-center">
-              <Building2 className="w-2 h-2 text-indigo-500" />
-              <div>
-                <p className="text-sm text-gray-400 font-light">Company</p>
-                <p className="mt-1">{data.CompanyName}</p>
+          <div className="px-5 py-3 rounded-lg shadow border border-gray-100 space-y-2 pb-5">
+            <p className="text-lg font-semibold">Position Details</p>
+            <div className="space-y-4">
+              <div className="flex items-center gap-5">
+                <Building2 className="size-5 text-indigo-500" />
+                <div className="leading-none">
+                  <p className="text-sm text-gray-400 ">Company</p>
+                  <p className="">{data.CompanyName}</p>
+                </div>
               </div>
-            </div>
-            <div className="flex items-center">
-              <User className="w-2 h-2 text-indigo-500" />
-              <div>
-                <p className="text-sm text-gray-400 font-light">Role</p>
-                <p className="mt-1">{data.Role}</p>
+              <div className="flex items-center gap-5">
+                <User className="size-5 text-indigo-500" />
+                <div className="leading-none">
+                  <p className="text-sm text-gray-400 ">Role</p>
+                  <p className="">{data.Role}</p>
+                </div>
               </div>
-            </div>
-            <div className="flex items-center">
-              <MapPin className="w-2 h-2 text-indigo-500" />
-              <div>
-                <p className="text-sm text-gray-400 font-light">Location</p>
-                <p className="mt-1">{data.Location || "Not specified"}</p>
+              <div className="flex items-center gap-5">
+                <MapPin className="size-5 text-indigo-500" />
+                <div className="leading-none">
+                  <p className="text-sm text-gray-400 ">Location</p>
+                  <p className="">{data.Location || "Not specified"}</p>
+                </div>
               </div>
-            </div>
-            <div className="flex items-center">
-              <DollarSign className="w-2 h-2 text-indigo-500" />
-              <div>
-                <p className="text-sm text-gray-400 font-light">Salary Range</p>
-                <p className="mt-1">{data.SalaryRange || "Not specified"}</p>
+              <div className="flex items-center gap-5">
+                <DollarSign className="size-5 text-indigo-500" />
+                <div className="leading-none">
+                  <p className="text-sm text-gray-400 ">Salary Range</p>
+                  <p className="">{data.SalaryRange || "Not specified"}</p>
+                </div>
               </div>
             </div>
           </div>
-          <div className="px-2 py-3 rounded-lg shadow border border-gray-100 space-y-2">
-            <p className="text-lg">Application Details</p>
-            <div className="flex items-center space-x-1.5">
-              <ExternalLink className="w-2 h-2 text-indigo-500" />
-              <Link
-                to={data.Link}
-                className="text-blue-400 decoration-blue-500 hover:underline"
+          <div className="px-5 py-3 rounded-lg shadow border border-gray-100 space-y-2">
+            <p className="text-lg font-semibold">Application Details</p>
+            <div className="flex items-center space-x-5">
+              <ExternalLink className="size-5 text-indigo-500" />
+              <a
+                href={
+                  RegExp("^https?://").test(data.Link)
+                    ? data.Link
+                    : `https://${data.Link}`
+                }
+                target="_blank"
+                rel="noopener norefferer"
+                className="text-blue-400 decoration-blue-500 hover:underline underline-offset-2"
               >
                 {data.Link}
-              </Link>
+              </a>
             </div>
           </div>
           {/* notes */}
-          <div className="px-2 py-3 rounded-lg shadow border border-gray-100 space-y-2">
-            <div className="flex items-center space-x-1">
-              <MessageSquare className="w-2 h-2 text-indigo-500" />
-              <p className="text-lg">Notes</p>
+          <div className="px-5 py-3 rounded-lg shadow border border-gray-100 space-y-2">
+            <div className="flex items-center space-x-2">
+              <p className="text-lg font-semibold">Notes</p>
+              <MessageSquare className="size-5 text-indigo-500" />
             </div>
-            <div className="bg-gray-200 rounded-lg p-2">{data.Notes}</div>
+            <div className="bg-gray-200 rounded-lg p-4">{data.Notes}</div>
           </div>
         </div>
         <div className="md:flex-[40%] space-y-2">
-          <div className="px-2 py-3 rounded-lg shadow space-y-2">
-            <p className="text-lg">Application Info</p>
-            <div className="flex items-center justify-between text-sm">
-              <p className="bg-gray-400">Days Since Applied</p>
-              <p>{daysElapsed}</p>
+          <div className="px-5 py-3 rounded-lg shadow space-y-2">
+            <p className="text-lg font-semibold ">Application Info</p>
+            <div className="flex items-center gap-10 text-sm">
+              <p className="text-gray-400">Days Since Applied</p>
+              <p className="text-gray-500">{daysElapsed}</p>
             </div>
           </div>
         </div>
