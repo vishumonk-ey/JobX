@@ -15,28 +15,29 @@ import { useSelector } from "react-redux";
 function Postform({ JobData }) {
   const author = useSelector((state)=>state.auth.userData)
   // console.log(author)
-  console.log(JobData);
+  // console.log(JobData.CompanyName);
+  // console.log(JobData);
   
   const {
     register,
     handleSubmit,
     setValue,
+    getValues ,
     formState: { errors },
   } = useForm({
     defaultValues: {
       CompanyName: JobData?.CompanyName || "",
       Role: JobData?.Role || "",
       Status: JobData?.Status || "Applied",
-      AppliedDate: JobData?.AppliedDate || "",
+      AppliedDate: JobData?.AppliedDate.slice(0,10) || "",
       Location: JobData?.Location || "",
-      Salary: JobData?.Salary || "",
+      Salary: JobData?.Salary.toLocaleString("en-IN") || "",
       Link: JobData?.Link || "",
       AppliedBy: JobData?.AppliedBy || "",
       Notes: JobData?.Notes || "",
       AuthorId : author.$id
     },
   });
-
   const [selectedStatus, setselectedStatus] = useState(
     JobData?.status || "Applied"
   );
@@ -47,16 +48,18 @@ function Postform({ JobData }) {
       setError("");
       if (JobData) {
         const isUpdated = await databaseService.updateDocument(
-          data,
+          {...data ,
+            Salary : Number(data.Salary.replaceAll("," , ""))
+          },
           JobData.$id
         );
         if (isUpdated) {
           navigate(`/view-page/${JobData.$id}`);
         }
       } else {
-        // console.log("data" , data);
+        console.log("salary" , Number(data.Salary));
         const isCreated = await databaseService.createDocument({...data ,
-          Salary : Number(data.Salary)
+          Salary : Number(data.Salary.replaceAll("," , ""))
         });
         if (isCreated) {
           navigate(`/view-page/${isCreated.$id}`);
@@ -108,7 +111,7 @@ function Postform({ JobData }) {
             <div className="flex-1 min-w-[200px]">
               <Input
                 label="Company Name*"
-                placeholder="Enter company name"
+                placeholder="Enter company name" 
                 {...register("CompanyName", {
                   required: "Please enter the company name ",
                 })}
@@ -229,6 +232,7 @@ function Postform({ JobData }) {
             <div className="flex-1 min-w-[200px]">
               <Input
                 label="Salary Range"
+                type ="text"
                 placeholder="e.g 55,000 - 1,00,000"
                 {...register("Salary"
                 )}
@@ -276,12 +280,12 @@ function Postform({ JobData }) {
           </div>
           {error && <p className="text-red-400 text-sm">{error.message || "Something went wrong !"}</p>}
           <hr className="px-2" />
-          <div className="w-full flex flex-col md:flex-row items-center justify-around">
+          <div className="w-full flex flex-col space-y-3 sm:space-y-0 sm:flex-row items-center justify-around">
             <Button type="submit">
               {JobData ? "Edit Document" : "Add document"}
             </Button>
             {JobData && (
-              <Button type="button" onClick={() => setisModalOpen(true)}>
+              <Button type="button" onClick={() => setisModalOpen(true)} className="bg-red-300 hover:bg-red-200">
                 Delete document
               </Button>
             )}
@@ -289,13 +293,13 @@ function Postform({ JobData }) {
         </form>
       </div>
       {isModalOpen && (
-        <div className="w-full max-w-xl rounded-lg md:max-w-3xl p-2 md:p-3.5 absolute top-5 left-[50%] transform translate-x-1/2 z-50">
+        <div className="w-full max-w-xl rounded-lg md:max-w-xl p-5 absolute top-50 left-[50%] transform -translate-x-1/2 z-50 border border-gray-200 shadow-lg bg-white">
           <p className="text-lg md:text-xl font-semibold">Delete Job Listing</p>
-          <p className="mt-2 text-gray-400 text-sm">
+          <p className="mt-2 text-gray-800 text-sm">
             Are you sure that you want to delete the data ? Once the data is
             lost , you wont be able to recover it !
           </p>
-          <div className="w-full flex items-center gap-2">
+          <div className="w-full flex items-center gap-5 mt-5 px-5">
             <Button className="flex-1" onClick={deleteJobData}>
               Delete
             </Button>

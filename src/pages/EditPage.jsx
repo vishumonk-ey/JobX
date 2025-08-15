@@ -13,7 +13,7 @@ function EditPage() {
     try {
       if (location.state) {
         console.log(location.state);
-        setjobData(location.state);
+        setjobData(location.state.JobData);
       } else {
         const data = await databaseService.getDocument(slug);
         setjobData(data);

@@ -46,6 +46,7 @@ class DataBaseService {
       );
       return allDocuments;
     } catch (error) {
+      console.log("Error: ",error);
       throw error;
     }
   }

@@ -121,7 +121,7 @@ function JobPage({ data }) {
                 <DollarSign className="size-5 text-indigo-500" />
                 <div className="leading-none">
                   <p className="text-sm text-gray-400 ">Salary Range</p>
-                  <p className="">{data.SalaryRange || "Not specified"}</p>
+                  <p className="">{data.Salary.toLocaleString("en-IN") || "Not specified"}</p>
                 </div>
               </div>
             </div>

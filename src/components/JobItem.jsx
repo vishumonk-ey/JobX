@@ -65,8 +65,8 @@ const sampleJobDataArray = [
 
 function JobItem({ data }) {
   return (
-    <div className="w-full p-2 border-b  border-b-indigo-200 overflow-x-auto scrollbar-hide">
-      <div className="w-full overflow-x-auto scrollbar-hide">
+    <div className="w-full p-2 border-b  border-b-indigo-200">
+      <div className="w-full scrollbar-hide">
         <Disclosure>
           <DisclosureButton className="w-full flex items-center">
             <div className="flex flex-1 items-center">

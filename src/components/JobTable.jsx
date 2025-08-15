@@ -34,12 +34,10 @@ function JobTable() {
   const [totalJobs, setTotalJobs] = useState(0);
   const buildQueries = useCallback(() => {
     let queries = [];
-    queries.push[Query.offset( (pageNumber - 1)*25)]
+    queries.push(Query.offset((pageNumber - 1) * 25));
     if (searchTerm.trim()) {
-      queries.push(
-        Query.equal("CompanyName", searchTerm.trim()),
-        Query.equal("Role", searchTerm.trim())
-      );
+      queries.push(Query.equal("Role", searchTerm.trim()))
+      queries.push(Query.equal("CompanyName", searchTerm.trim()))
     }
     if (dateFilter) {
       queries.push(
@@ -52,12 +50,14 @@ function JobTable() {
       queries.push(Query.equal("Status", statusFilter));
     }
     return queries;
-  }, [searchTerm, dateFilter, statusFilter , pageNumber]);
+  }, [searchTerm, dateFilter, statusFilter, pageNumber]);
   const fetchData = useCallback(
     async (queries) => {
       try {
         setisLoading(true);
         seterror("");
+        console.log("queries ",queries);
+        
         const fetchedDataPromise = databaseService.listDocuments(queries);
         const totalDataPromise = databaseService.listDocuments([
           ...queries,
@@ -71,7 +71,8 @@ function JobTable() {
         if (queries.length === 1) {
           dispatch(addJobs(fetchedData));
         }
-        setallJobs(fetchedData);
+        console.log("fd : ",fetchedData);
+        setallJobs(fetchedData.documents);
       } catch (error) {
         console.log("error while fetching:", error);
         seterror("Failed to fetch jobs. Please try again.");
@@ -84,10 +85,12 @@ function JobTable() {
   useEffect(() => {
     const timeout = setTimeout(() => {
       const queries = buildQueries();
+      console.log("queries in useEffexct",queries);
+      
       if (queries.length === 1 && storeAllJobs != null) {
         setallJobs(storeAllJobs);
       } else {
-        fetchData();
+        fetchData(queries);
       }
     }, 300);
     return () => {
@@ -246,11 +249,11 @@ function JobTable() {
           </Listbox>
         </div>
       </div>
-      <div className="w-full mt-2">
-        <div className="w-full p-2 border-b  border-b-indigo-200 overflow-x-auto scrollbar-hide bg-indigo-400">
+      <div className="w-full mt-2 overflow-x-auto scrollbar-hide">
+        <div className="w-full p-2 border-b  border-b-indigo-200 overflow-x-visible scrollbar-hide bg-indigo-400">
           <div className="w-full overflow-x-auto scrollbar-hide">
             <div className="w-full flex items-center">
-              <div className="flex flex-1 items-center">
+              <div className="flex flex-1 items-center pr-8 overflow-x-visible">
                 <p className="flex-1 min-w-[200px] text-left text-base md:text-lg">
                   Company Name
                 </p>
@@ -283,7 +286,7 @@ function JobTable() {
           </div>
         ) : (
           allJobs.map((eachJob) => (
-            <JobItem data={eachJob} key={eachJob.CompanyName}></JobItem>
+            <JobItem data={eachJob} key={eachJob.$id}></JobItem>
           ))
         )}
         <p className="h-px my-2 w-full bg-gray-400"></p>
@@ -303,9 +306,9 @@ function JobTable() {
             <ChevronRight
               className="size-8 p-2 hover:bg-indigo-200 disabled:bg-indigo-900"
               onClick={() => {
-                setpageNumber(pageNumber+1);
+                setpageNumber(pageNumber + 1);
               }}
-             disabled={Math.ceil(totalJobs / 25) === pageNumber}
+              disabled={Math.ceil(totalJobs / 25) === pageNumber}
             />
           </div>
         </div>
