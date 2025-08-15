@@ -25,48 +25,50 @@ import {
 import { Link } from "react-router-dom";
 
 // Sample data for testing
-const data = {
-  CompanyName: "TechCorp Solutions",
-  Role: "Senior Frontend Developer",
-  Status: "Interview",
-  DateApplied: "2024-01-15",
-  notes: "Applied through LinkedIn and got a positive response! 🎉",
-  Link: "https://techcorp.com/careers",
-  appliedBy: "LinkedIn",
-};
+// const data = {
+//   CompanyName: "TechCorp Solutions",
+//   Role: "Senior Frontend Developer",
+//   Status: "Interview",
+//   DateApplied: "2024-01-15",
+//   notes: "Applied through LinkedIn and got a positive response! 🎉",
+//   Link: "https://techcorp.com/careers",
+//   appliedBy: "LinkedIn",
+// };
 
 // More sample data objects for different scenarios
-const sampleJobDataArray = [
-  {
-    CompanyName: "TechCorp Solutions",
-    Role: "Senior Frontend Developer",
-    Status: "Interview",
-    DateApplied: "2024-01-15",
-  },
-  {
-    CompanyName: "InnovateSoft Inc",
-    Role: "Full Stack Engineer",
-    Status: "Offer",
-    DateApplied: "2024-01-10",
-  },
-  {
-    CompanyName: "DataFlow Systems",
-    Role: "React Developer",
-    Status: "Rejected",
-    DateApplied: "2024-01-08",
-  },
-  {
-    CompanyName: "CloudTech Solutions",
-    Role: "UI/UX Designer",
-    Status: "Applied",
-    DateApplied: "2024-01-12",
-  },
-];
+// const sampleJobDataArray = [
+//   {
+//     CompanyName: "TechCorp Solutions",
+//     Role: "Senior Frontend Developer",
+//     Status: "Interview",
+//     DateApplied: "2024-01-15",
+//   },
+//   {
+//     CompanyName: "InnovateSoft Inc",
+//     Role: "Full Stack Engineer",
+//     Status: "Offer",
+//     DateApplied: "2024-01-10",
+//   },
+//   {
+//     CompanyName: "DataFlow Systems",
+//     Role: "React Developer",
+//     Status: "Rejected",
+//     DateApplied: "2024-01-08",
+//   },
+//   {
+//     CompanyName: "CloudTech Solutions",
+//     Role: "UI/UX Designer",
+//     Status: "Applied",
+//     DateApplied: "2024-01-12",
+//   },
+// ];
 
 function JobItem({ data }) {
+  console.log(data);
+  
   return (
-    <div className="w-full p-2 border-b  border-b-indigo-200">
-      <div className="w-full scrollbar-hide">
+    <div className="w-full p-2 border-b min-w-[732px] border-b-indigo-200">
+      <div className="w-full scrollbar-hide text-gray-700">
         <Disclosure>
           <DisclosureButton className="w-full flex items-center">
             <div className="flex flex-1 items-center">
@@ -78,7 +80,7 @@ function JobItem({ data }) {
               </p>
               <div className="flex-1 min-w-[150px]">
                 <p
-                  className={`mx-auto w-fit px-3 py-1 text-center rounded-xl text-base font-medium md:text-lg ${
+                  className={`mx-auto w-fit px-3 py-1 text-center rounded-xl text-base md:text-lg ${
                     data.Status === "Offer"
                       ? "bg-emerald-100 text-emerald-700 "
                       : data.Status === "Rejected"
@@ -155,7 +157,7 @@ function JobItem({ data }) {
                     <h4 className="font-medium text-gray-900">Notes</h4>
                   </div>
                   <p className="text-sm text-gray-700 leading-relaxed">
-                    {data.notes || "No notes added yet."}
+                    {data.Notes || "No notes added yet."}
                   </p>
                 </div>
 
@@ -168,7 +170,11 @@ function JobItem({ data }) {
                     </h4>
                   </div>
                   <a
-                    href={data.Link || "#"}
+                    href={
+                      RegExp("^https?://").test(data.Link)
+                        ? data.Link
+                        : `https://${data.Link}`
+                    }
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700 hover:underline transition-colors"
@@ -187,7 +193,7 @@ function JobItem({ data }) {
                     </h4>
                   </div>
                   <div className="w-fit px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">
-                    {data.appliedBy || "Not specified"}
+                    {data.AppliedBy || "Not specified"}
                   </div>
                 </div>
               </div>

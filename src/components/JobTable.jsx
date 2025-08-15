@@ -250,10 +250,10 @@ function JobTable() {
         </div>
       </div>
       <div className="w-full mt-2 overflow-x-auto scrollbar-hide">
-        <div className="w-full p-2 border-b  border-b-indigo-200 overflow-x-visible scrollbar-hide bg-indigo-400">
-          <div className="w-full overflow-x-auto scrollbar-hide">
+        <div className="w-full p-2 border-b border-b-indigo-200  bg-indigo-400 min-w-[732px]">
+          <div className="w-full">
             <div className="w-full flex items-center">
-              <div className="flex flex-1 items-center pr-8 overflow-x-visible">
+              <div className="flex flex-1 items-center pr-8 text-white/80 font-semibold">
                 <p className="flex-1 min-w-[200px] text-left text-base md:text-lg">
                   Company Name
                 </p>
