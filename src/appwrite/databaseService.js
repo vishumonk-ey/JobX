@@ -1,4 +1,4 @@
-import { Client, Databases, ID, Permission , Role } from "appwrite";
+import { Client, Databases, ID, Permission, Role } from "appwrite";
 import { config } from "../assets/config";
 class DataBaseService {
   client = new Client()
@@ -10,6 +10,8 @@ class DataBaseService {
   }
   async createDocument(data) {
     try {
+      console.log("dr",data);
+      
       const document = await this.database.createDocument(
         config.appwriteDatabaseId,
         config.appwriteCollectionId,
@@ -19,6 +21,11 @@ class DataBaseService {
         //   Permission.read(Role.user(authorId)),
         //   Permission.write(Role.user(authorId)),
         // ]
+        [
+          Permission.read(Role.user(data.AuthorId)), // Only this user can read
+          Permission.update(Role.user(data.AuthorId)), // Only this user can update
+          Permission.delete(Role.user(data.AuthorId)), // Only this user can delete
+        ]
       );
       return document;
     } catch (error) {
@@ -32,7 +39,7 @@ class DataBaseService {
         config.appwriteCollectionId,
         documentId
       );
-      return document
+      return document;
     } catch (error) {
       throw error;
     }
@@ -46,7 +53,7 @@ class DataBaseService {
       );
       return allDocuments;
     } catch (error) {
-      console.log("Error: ",error);
+      console.log("Error: ", error);
       throw error;
     }
   }

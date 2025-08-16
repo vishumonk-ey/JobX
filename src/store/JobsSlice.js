@@ -13,6 +13,7 @@ const jobslice = createSlice({
   reducers: {
     addJobs: (state, action) => {
       state.allJobs = action.payload;
+      state.totalAppliedCount = action.payload.total
     },
     addOfferCount: (state, action) => {
       state.offerCount = action.payload;

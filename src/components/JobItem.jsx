@@ -85,7 +85,7 @@ function JobItem({ data }) {
     }
   };
   return (
-    <div className="w-full p-2 border-b min-w-[732px] border-b-indigo-200">
+    <div className="w-full p-2 border-b min-w-[732px] border-b-indigo-200 hover:px-2.5 rounded transition">
       <div className="w-full scrollbar-hide text-gray-700">
         <Disclosure>
           <DisclosureButton className="w-full flex items-center">
@@ -98,11 +98,11 @@ function JobItem({ data }) {
               </p>
               <div className="flex-1 min-w-[150px]">
                 <p
-                  className={`mx-auto w-fit px-3 py-1 text-center rounded-xl text-base md:text-lg ${
+                  className={`mx-auto w-fit px-3 py-1 text-center rounded-xl text-base ${
                     data.Status === "Offer"
                       ? "bg-emerald-100 text-emerald-700 "
                       : data.Status === "Rejected"
-                      ? "bg-orange-100 text-orange-700"
+                      ? "bg-red-100 text-red-700"
                       : data.Status === "Interview"
                       ? "bg-blue-100 text-blue-700 "
                       : "bg-gray-300"

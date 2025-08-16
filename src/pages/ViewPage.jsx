@@ -23,8 +23,8 @@ function ViewPage() {
     fetchData(slug);
   }, []);
   return isLoading ? (
-    <div className="w-full flex-col gap-2 justify-center items-center">
-      <LoaderCircle className="animate-spin size-3" />
+    <div className="w-full h-[680px] flex flex-col justify-center items-center">
+      <LoaderCircle className="animate-spin size-5" />
       <p className="font-semibold">Loading...</p>
     </div>
   ) : (

@@ -86,7 +86,7 @@ function JobPage({ data }) {
             <div
               className={
                 data.Status == "Rejected"
-                  ? "bg-red-200 border-red-300 text-red-600"
+                  ? "rounded-2xl px-4 w-fit p-1 bg-red-200 border-red-300 text-red-600"
                   : "" +
                     `rounded-2xl px-4 w-fit bg-blue-200 border p-1 border-blue-300 text-blue-600 `
               }

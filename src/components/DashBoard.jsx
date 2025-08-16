@@ -13,7 +13,7 @@ import {
 import { DashboardCard, Piechart, Graph , MotivationalCard} from "./index";
 // import { Select } from "@headlessui/react";
 function DashBoard() {
-  const inStore = useSelector((state) => state.interviewCount);
+  const inStore = useSelector((state) => state.jobs.interviewCount);
   console.log("re-re nder");
 
   // let totalAppliedCount,
@@ -66,16 +66,17 @@ function DashBoard() {
           offerPromise,
           pastWeekDataPromise,
         ]);
-      settotalAppliedCount(totalApplied.length);
-      setinterviewCount(interview.length);
-      setrejectedCount(rejected.length);
-      setofferCount(offer.length);
+      settotalAppliedCount(totalApplied.total);
+      setinterviewCount(interview.total);
+      setrejectedCount(rejected.total);
+      setofferCount(offer.total);
       setpastWeekData(pastWeekDataDB);
       dispatch(addOfferCount(offerCount));
       dispatch(addInterviewCount(interviewCount));
       dispatch(addRejectedCount(rejectedCount));
       dispatch(addTotalAppliedCount(totalAppliedCount));
       dispatch(addPastWeekData(pastWeekData));
+      
       // update in store also
     } catch (error) {
       console.log("error", error);

@@ -32,12 +32,18 @@ function JobTable() {
   const dispatch = useDispatch();
   const [pageNumber, setpageNumber] = useState(1);
   const [totalJobs, setTotalJobs] = useState(0);
+  // console.log("tj: ",totalJobs);
+
   const buildQueries = useCallback(() => {
     let queries = [];
     queries.push(Query.offset((pageNumber - 1) * 25));
     if (searchTerm.trim()) {
-      queries.push(Query.equal("Role", searchTerm.trim()))
-      queries.push(Query.equal("CompanyName", searchTerm.trim()))
+      queries.push(
+        Query.or([
+          Query.equal("Role", searchTerm.trim()),
+          Query.equal("CompanyName", searchTerm.trim()),
+        ])
+      );
     }
     if (dateFilter) {
       queries.push(
@@ -56,8 +62,8 @@ function JobTable() {
       try {
         setisLoading(true);
         seterror("");
-        console.log("queries ",queries);
-        
+        console.log("queries ", queries);
+
         const fetchedDataPromise = databaseService.listDocuments(queries);
         const totalDataPromise = databaseService.listDocuments([
           ...queries,
@@ -67,11 +73,13 @@ function JobTable() {
           fetchedDataPromise,
           totalDataPromise,
         ]);
-        setTotalJobs(totalData.length);
+        // console.log("td : ",totalData);
+
+        setTotalJobs(totalData.total);
         if (queries.length === 1) {
           dispatch(addJobs(fetchedData));
         }
-        console.log("fd : ",fetchedData);
+        console.log("fd : ", fetchedData);
         setallJobs(fetchedData.documents);
       } catch (error) {
         console.log("error while fetching:", error);
@@ -85,8 +93,8 @@ function JobTable() {
   useEffect(() => {
     const timeout = setTimeout(() => {
       const queries = buildQueries();
-      console.log("queries in useEffexct",queries);
-      
+      console.log("queries in useEffexct", queries);
+
       if (queries.length === 1 && storeAllJobs != null) {
         setallJobs(storeAllJobs);
       } else {
@@ -286,33 +294,45 @@ function JobTable() {
           </div>
         ) : (
           <div className="min-h-[250px]">
-            {allJobs.length == 0 ? "No data yet.Start Tracking !" : allJobs.map((eachJob) => (
-            <JobItem data={eachJob} key={eachJob.$id}></JobItem>
-          ))} 
+            {allJobs.length == 0 ? (
+              <div className="py-60 flex justify-center items-center">
+                <p className="text-red-500 hover:text-red-400 font-semibold">
+                  No data yet , Start tracking !
+                </p>
+              </div>
+            ) : (
+              allJobs.map((eachJob) => (
+                <JobItem data={eachJob} key={eachJob.$id}></JobItem>
+              ))
+            )}
           </div>
-          
         )}
         <p className="h-px my-2 min-w-[732px] bg-gray-400"></p>
         {/* pagination logic */}
         <div className="w-full px-6 py-2 flex items-center justify-end min-w-[732px]">
           <div className="rounded-lg border border-indigo-700 flex items-center space-x-0 overflow-hidden ">
-            <ChevronLeft
-              className="size-8 p-2 hover:bg-indigo-200 disabled:bg-indigo-300"
+            <button
+              className="disabled:bg-indigo-300 hover:bg-indigo-200"
               onClick={() => {
                 setpageNumber(pageNumber - 1);
               }}
-              disabled={pageNumber === 1}
-            />
+              disabled={pageNumber == 1}
+            >
+              <ChevronLeft className="size-8 p-2 " />
+            </button>
+
             <div className="size-8 p-2 bg-indigo-500 text-white flex items-center justify-center">
               <p>{pageNumber}</p>
             </div>
-            <ChevronRight
-              className="size-8 p-2 hover:bg-indigo-200 disabled:bg-indigo-900"
+            <button
+              className="hover:bg-indigo-200 disabled:bg-indigo-300"
+              disabled={Math.ceil(totalJobs / 25) === pageNumber}
               onClick={() => {
                 setpageNumber(pageNumber + 1);
               }}
-              disabled={Math.ceil(totalJobs / 25) === pageNumber}
-            />
+            >
+              <ChevronRight className="size-8 p-2 " />
+            </button>
           </div>
         </div>
       </div>

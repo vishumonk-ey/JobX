@@ -19,7 +19,9 @@ class Auth {
       if (promise) {
         const sessionObject = await this.Login({email, password});
         console.log("return value after appwrite login : ",sessionObject);
-        return sessionObject
+        if(sessionObject){
+          return await this.getCurrentUser()
+        }
       }
     } catch (error) {
       console.log("error in appwrite signup :",error);
@@ -34,9 +36,9 @@ class Auth {
         email,
         password
       );
-      console.log("sessObj" ,sessionObject);
-      
-      return sessionObject;
+      if(sessionObject){
+        return await this.getCurrentUser()
+      }
     } catch (error) {
       console.log("error in logging in: ",error)
       throw error;
