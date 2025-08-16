@@ -22,8 +22,8 @@ import {
   DisclosureButton,
   DisclosurePanel,
 } from "@headlessui/react";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+import {databaseService} from '../appwrite/databaseService'
 // Sample data for testing
 // const data = {
 //   CompanyName: "TechCorp Solutions",
@@ -65,7 +65,25 @@ import { Link } from "react-router-dom";
 
 function JobItem({ data }) {
   console.log(data);
-  
+  const navigate = useNavigate()
+  const handleDelete = async () => {
+    try {
+      if (
+        window.confirm(
+          "Are you sure , you want to delete ? Once the data is deleted , you won't be able to access again."
+        )
+      ) {
+        const isDeleted = await databaseService.deleteDocument(data.$id);
+        console.log(isDeleted);
+        if (isDeleted) {
+          navigate("/");
+        }
+      }
+    } catch (error) {
+      console.log("error while deleting",error);
+      
+    }
+  };
   return (
     <div className="w-full p-2 border-b min-w-[732px] border-b-indigo-200">
       <div className="w-full scrollbar-hide text-gray-700">
@@ -94,7 +112,7 @@ function JobItem({ data }) {
                 </p>
               </div>
               <p className="flex-1 min-w-[150px] text-left text-base md:text-lg">
-                {data.DateApplied}
+                {data.AppliedDate.slice(0, 10)}
               </p>
             </div>
             <Popover className="relative">
@@ -134,14 +152,15 @@ function JobItem({ data }) {
 
                     <div className="border-t border-gray-100 my-1"></div>
 
-                    <Link to="/delete" className="block">
-                      <div className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-red-50 transition-all duration-200 group">
-                        <Trash2 className="w-4 h-4 text-red-600 group-hover:scale-110 transition-transform" />
-                        <span className="text-sm font-medium text-gray-700 group-hover:text-red-700">
-                          Delete Job
-                        </span>
-                      </div>
-                    </Link>
+                    <div
+                      className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-red-50 transition-all duration-200 group"
+                      onClick={handleDelete}
+                    >
+                      <Trash2 className="w-4 h-4 text-red-600 group-hover:scale-110 transition-transform" />
+                      <span className="text-sm font-medium text-gray-700 group-hover:text-red-700">
+                        Delete Job
+                      </span>
+                    </div>
                   </div>
                 </PopoverPanel>
               </Transition>

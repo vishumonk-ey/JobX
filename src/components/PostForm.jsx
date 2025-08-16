@@ -31,7 +31,7 @@ function Postform({ JobData }) {
       Status: JobData?.Status || "Applied",
       AppliedDate: JobData?.AppliedDate.slice(0,10) || "",
       Location: JobData?.Location || "",
-      Salary: JobData?.Salary.toLocaleString("en-IN") || "",
+      Salary: JobData?.Salary?.toLocaleString("en-IN") || "",
       Link: JobData?.Link || "",
       AppliedBy: JobData?.AppliedBy || "",
       Notes: JobData?.Notes || "",

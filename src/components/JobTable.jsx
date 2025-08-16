@@ -249,8 +249,8 @@ function JobTable() {
           </Listbox>
         </div>
       </div>
-      <div className="w-full mt-2 overflow-x-auto scrollbar-hide">
-        <div className="w-full p-2 border-b border-b-indigo-200  bg-indigo-400 min-w-[732px]">
+      <div className="w-full mt-2 overflow-x-auto scrollbar-hide p-4 ">
+        <div className="w-full p-2 border-b border-b-indigo-200  bg-indigo-400 min-w-[732px] rounded-lg">
           <div className="w-full">
             <div className="w-full flex items-center">
               <div className="flex flex-1 items-center pr-8 text-white/80 font-semibold">
@@ -285,14 +285,17 @@ function JobTable() {
             </p>
           </div>
         ) : (
-          allJobs.map((eachJob) => (
+          <div className="min-h-[250px]">
+            {allJobs.length == 0 ? "No data yet.Start Tracking !" : allJobs.map((eachJob) => (
             <JobItem data={eachJob} key={eachJob.$id}></JobItem>
-          ))
+          ))} 
+          </div>
+          
         )}
-        <p className="h-px my-2 w-full bg-gray-400"></p>
+        <p className="h-px my-2 min-w-[732px] bg-gray-400"></p>
         {/* pagination logic */}
-        <div className="w-full px-6 py-2 flex items-center justify-end">
-          <div className="rounded-lg border border-indigo-700 flex items-center space-x-0 overflow-hidden">
+        <div className="w-full px-6 py-2 flex items-center justify-end min-w-[732px]">
+          <div className="rounded-lg border border-indigo-700 flex items-center space-x-0 overflow-hidden ">
             <ChevronLeft
               className="size-8 p-2 hover:bg-indigo-200 disabled:bg-indigo-300"
               onClick={() => {

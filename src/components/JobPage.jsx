@@ -36,13 +36,14 @@ function JobPage({ data }) {
       )
     ) {
       const isDeleted = await databaseService.deleteDocument(data.$id);
+      console.log(isDeleted);
       if (isDeleted) {
         navigate("/");
       }
     }
   };
   const daysElapsed = Math.floor(
-    (new Date() - new Date(data.AppliedDate)) / (24 * 60 * 60 * 60 * 1000)
+    (new Date() - new Date(data.AppliedDate)) / (24 * 60 * 60 * 1000)
   );
   return (
     <div className="w-full">
@@ -121,7 +122,7 @@ function JobPage({ data }) {
                 <DollarSign className="size-5 text-indigo-500" />
                 <div className="leading-none">
                   <p className="text-sm text-gray-400 ">Salary Range</p>
-                  <p className="">{data.Salary.toLocaleString("en-IN") || "Not specified"}</p>
+                  <p className="">{data.Salary?.toLocaleString() || "Not specified"}</p>
                 </div>
               </div>
             </div>
@@ -158,7 +159,7 @@ function JobPage({ data }) {
             <p className="text-lg font-semibold ">Application Info</p>
             <div className="flex items-center gap-10 text-sm">
               <p className="text-gray-400">Days Since Applied</p>
-              <p className="text-gray-500">{daysElapsed}</p>
+              <p className="text-gray-700">{daysElapsed}</p>
             </div>
           </div>
         </div>
