@@ -115,7 +115,7 @@ function JobItem({ data }) {
                 {data.AppliedDate.slice(0, 10)}
               </p>
             </div>
-            <Popover className="relative">
+            <Popover >
               <PopoverButton className="outline-none group">
                 <span className="w-8 h-8 rounded-full hover:bg-gray-100 transition-all duration-200 flex items-center justify-center group-hover:scale-110">
                   <MoreHorizontal className="w-4 h-4 text-gray-600 group-hover:text-gray-800" />

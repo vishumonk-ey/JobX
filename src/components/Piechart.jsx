@@ -1,9 +1,16 @@
 import React, { useState } from "react";
-import { Pie, ResponsiveContainer, Sector, Tooltip , Cell , PieChart} from "recharts";
+import {
+  Pie,
+  ResponsiveContainer,
+  Sector,
+  Tooltip,
+  Cell,
+  PieChart,
+} from "recharts";
 
 function Piechart({ data }) {
-  // console.log(data);
-  
+  console.log(data);
+
   const COLORS = ["#34D399", "#60A5FA", "#FBBF24", "#F87171"];
   const renderActiveShape = (props) => {
     const {
@@ -42,28 +49,34 @@ function Piechart({ data }) {
       </g>
     );
   };
-  const [activeIndex ,setactiveIndex] = useState(0)
+  const [activeIndex, setactiveIndex] = useState(0);
   return (
     <ResponsiveContainer width="100%" height={400}>
       <PieChart>
         <Pie
           dataKey="value"
-          activeIndex = {activeIndex}
-          activeShape = {renderActiveShape}
+          activeIndex={activeIndex}
+          activeShape={renderActiveShape}
           data={data}
           cx="50%"
           cy="50%"
           outerRadius={90}
-        //   fill="purple"
-        onMouseEnter={(_,index)=>setactiveIndex(index)}
+          nameKey="status"
+          //   fill="purple"
+          onMouseEnter={(_, index) => setactiveIndex(index)}
         >
-            {data.map((entry,index)=>(
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-            ))}
+          {data.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+          ))}
         </Pie>
-        <Tooltip 
-            contentStyle={{borderRadius : '8px'}}
-            formatter={(value , status)=>[`Count : ${value}` ,`Status : ${status}`]}
+        <Tooltip
+          contentStyle={{ borderRadius: "8px" }}
+          // formatter={(value , status , name)=>[` Vlaue : ${value}` ,` Status : ${status}` , `${name}`]}
+          // labelFormatter={(value)=>{
+          //   return `label : ${value}`
+
+          // }}
+          formatter={(value, name) => [value, name]}
         />
       </PieChart>
     </ResponsiveContainer>

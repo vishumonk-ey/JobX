@@ -108,7 +108,7 @@ function JobTable() {
   return (
     <div className="rounded-lg bg-indigo-100">
       <div className="w-full flex flex-col md:flex-row items-center py-3 px-5 md:justify-between space-y-2 md:space-y-0">
-        <div className="rounded-lg focus:ring ring-indigo-500 bg-indigo-200 px-2 py-1 flex items-center w-full md:w-1/2">
+        <div className="rounded-lg hover:ring-1 ring-indigo-900 bg-indigo-200 px-2 py-1 flex items-center w-full md:w-1/3">
           <Search className="w-5 h-5 text-indigo-100 hover:text-indigo-400 cursor-pointer mr-2" />
           <input
             className="flex-1 outline-none text-gray-500"
@@ -133,8 +133,8 @@ function JobTable() {
 
           //  both of the above attributes arent required in my case?
           >
-            <div className="relative">
-              <ListboxButton className="px-3 py-2 bg-white hover:bg-indigo-100 flex items-center transition rounded-lg text-indigo-700 shadow border border-indigo-200 focus:ring-2 focus:ring-indigo-400 focus:outline-none">
+            <div>
+              <ListboxButton className="px-3 py-2 bg-white hover:bg-indigo-100 flex items-center transition rounded-lg text-indigo-700 shadow border border-indigo-200 focus:ring-2 focus:ring-indigo-400 focus:outline-none ">
                 <Filter className="w-4 h-4 text-indigo-500 mr-1.5" />
                 <span className="font-medium">Filter</span>
                 <ChevronDown className="ml-2 w-4 h-4 text-indigo-400" />
@@ -149,7 +149,7 @@ function JobTable() {
               >
                 <ListboxOptions
                   anchor="bottom end"
-                  className="z-50 rounded-xl w-48 p-2 bg-white border border-indigo-200 shadow-lg outline-none space-y-1 mt-2"
+                  className="rounded-xl w-48 p-2 bg-white border border-indigo-200 shadow-lg outline-none space-y-1 mt-2"
                 >
                   {/* Date Filter Options */}
                   {[
@@ -258,7 +258,7 @@ function JobTable() {
         </div>
       </div>
       <div className="w-full mt-2 overflow-x-auto scrollbar-hide p-4 ">
-        <div className="w-full p-2 border-b border-b-indigo-200  bg-indigo-400 min-w-[732px] rounded-lg">
+        <div className="w-full p-2 bg-indigo-300 min-w-[732px] rounded-lg">
           <div className="w-full">
             <div className="w-full flex items-center">
               <div className="flex flex-1 items-center pr-8 text-white/80 font-semibold">

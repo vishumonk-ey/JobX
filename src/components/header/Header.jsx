@@ -65,11 +65,11 @@ function Header() {
   };
   console.log("login ", isLoggedIn);
   const total = useSelector((state)=>state.jobs)
-  console.log("T",total);
+  // console.log("T",total);
   
   return (
     <header className="w-full">
-      <div className="px-6 md:px-15 bg-indigo-300 py-2 flex items-center justify-between dark:text-white">
+      <div className="px-6 md:px-15 bg-indigo-400 py-2 flex items-center justify-between dark:text-white">
         <Link className="flex items-center space-x-2" to="/">
           <Logo />
           <p className="font-bold text-2xl">JobX</p>
@@ -108,7 +108,7 @@ function Header() {
 
               <PopoverPanel
                 anchor="bottom"
-                className="z-50 mt-2 w-65 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden"
+                className="fixed z-50 mt-2 w-65 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden"
               >
                 <div className="p-4">
                   {/* User Header */}
@@ -138,7 +138,7 @@ function Header() {
                         </span>
                       </div>
                       <span className="text-lg font-bold text-indigo-600">
-                        {total ? total : " - " }
+                        {total ? total.allJobs?.total : " - " }
                       </span>
                     </div>
                   </div>

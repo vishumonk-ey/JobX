@@ -84,7 +84,6 @@ function DashBoard() {
   }, []);
   const pieChartData = useMemo(() => {
     const data = [
-      { status: "Total Applied", value: totalAppliedCount },
       { status: "Offer", value: offerCount },
       { status: "Interview", value: interviewCount },
       { status: "Rejected", value: rejectedCount },
