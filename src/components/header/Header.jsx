@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Logo from "../Logo";
 import {
   Sun,
@@ -44,8 +44,8 @@ function Header() {
   // const userData = useSelector((state)=>state.userData)
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const userData = useSelector((state) => state.auth.userData);
-  console.log("ud" ,userData);
-  
+  console.log("ud", userData);
+
   // const userData = {
   //   name: "John Doe",
   //   email: "john.doe@example.com",
@@ -64,9 +64,15 @@ function Header() {
     }
   };
   console.log("login ", isLoggedIn);
-  const total = useSelector((state)=>state.jobs)
-  // console.log("T",total);
+  const total = useSelector((state) => state.jobs);
+  console.log("Total where i am getting data ",total);
   // console.log("re-rendered");
+  let location = useLocation()
+  // console.log('ul' , location);
+  useEffect(()=>{
+    setisMenuOpen(false)
+    document.querySelector('body').classList.remove("overflow-hidden")
+  } , [location])
   return (
     <header className="w-full">
       <div className="px-6 md:px-15 bg-indigo-400 py-2 flex items-center justify-between dark:text-white">
@@ -138,7 +144,7 @@ function Header() {
                         </span>
                       </div>
                       <span className="text-lg font-bold text-indigo-600">
-                        {total ? total.allJobs?.total : " - " }
+                        {total ? total.allJobs?.total : " - "}
                       </span>
                     </div>
                   </div>
@@ -180,7 +186,8 @@ function Header() {
             <div
               className="flex flex-col justify-center items-center w-5 h-5 gap-[4px] md:hidden"
               onClick={() => {
-                setisMenuOpen(!isMenuOpen);
+                setisMenuOpen(true);
+                document.querySelector('body').classList.add("overflow-hidden")
               }}
             >
               <span
@@ -208,88 +215,101 @@ function Header() {
           )}
         </div>
       </div>
-      {/*  for mobile  */}
+      {/*  for mobile menu */}
       <div
         className={
           isMenuOpen
-            ? "fixed left-0 top-0 bottom-0 right-0 opacity-100 transition duration-300 translate-x-0 bg-white z-100 "
+            ? "fixed left-0 top-0 bottom-0 right-0 opacity-100 transition duration-300 translate-x-0  z-100 "
             : "-translate-x-10 opacity-0 transition duration-300 hidden"
         }
-        
-        // onClickCapture={()=>setisMenuOpen(!isMenuOpen)}
+        // onClick={() => {
+        //   setTimeout(() => setisMenuOpen(!isMenuOpen), 100);
+        // }}
       >
-        <div className="p-6">
-          {/* userProfile */}
-          <div className="flex items-center space-x-3 mb-4">
-            <div>
-              <img
-                src={accountIcon}
-                className="w-12 h-12 rounded-full border-2 border-indigo-100"
-                alt="profile"
-              />
+        {" "}
+        <div className="w-full h-full relative bg-gray-50 "
+        onClick={()=>{
+          // console.log('onclick ran');
+          document.querySelector('body').classList.remove("overflow-hidden")
+          setisMenuOpen(false)}}>
+          <div className="p-6 bg-white rounded-lg"
+          onClick={(e)=>e.stopPropagation()}>
+            {/* userProfile */}
+            <div className="flex items-center space-x-3 mb-4">
+              <div>
+                <img
+                  src={accountIcon}
+                  className="w-12 h-12 rounded-full border-2 border-indigo-100"
+                  alt="profile"
+                />
+              </div>
+              <div className="flex-1">
+                <p className="font-semibold text-gray-900 text-lg">
+                  {userData?.name}
+                </p>
+                <p className="text-sm text-gray-500">{userData?.email}</p>
+              </div>
             </div>
-            <div className="flex-1">
-              <p className="font-semibold text-gray-900 text-lg">
-                {userData?.name}
-              </p>
-              <p className="text-sm text-gray-500">{userData?.email}</p>
-            </div>
-          </div>
-          <div className="flex items-center justify-between p-4 rounded-lg bg-gradient-to-r from-indigo-50 to-purple-50 mb-4">
-            <div className="flex items-center space-x-2">
-              <Briefcase className="w-4 h-4 text-indigo-600" />
-              <span className="text-gray-700 text-sm font-medium">
-                Total Applied
+            <div className="flex items-center justify-between p-4 rounded-lg bg-gradient-to-r from-indigo-50 to-purple-50 mb-4">
+              <div className="flex items-center space-x-2">
+                <Briefcase className="w-4 h-4 text-indigo-600" />
+                <span className="text-gray-700 text-sm font-medium">
+                  Total Applied
+                </span>
+              </div>
+              <span className="text-lg font-bold text-indigo-600">
+              {total ? total.allJobs?.total : " - "}
               </span>
             </div>
-            <span className="text-lg font-bold text-indigo-600">
-              {userData?.totalApplied}
-            </span>
+            {/* mobile navigation */}
+            {/* <div></div> */}
+            <div className="py-4 space-y-2 text-gray-700 overflow-hidden">
+              <Link
+                to="/dashboard"
+                className="flex items-center space-x-2 py-3 hover:bg-indigo-50 rounded-lg transition px-4"
+                // onClick={() => {
+                //   console.log("ran");
+
+                //   setisMenuOpen(false);
+                // }}
+              >
+                <Briefcase className="w-4 h-4 text-gray-500" />
+                <span className="text-sm font-medium">Dashboard</span>
+              </Link>
+              <Link
+                to="/"
+                className="flex items-center space-x-2 py-3 hover:bg-indigo-50 rounded-lg transition px-4"
+                // onClick={() => setisMenuOpen(false)}
+              >
+                <User className="w-4 h-4 text-gray-500" />
+                <span className="text-sm font-medium">Profile</span>
+              </Link>
+              <Link
+                to="/"
+                className="flex items-center space-x-2 py-3 hover:bg-indigo-50 rounded-lg transition px-4"
+                // onClick={() => setisMenuOpen(false)}
+              >
+                <Mail className="w-4 h-4 text-gray-500" />
+                <span className="text-sm font-medium">Messages</span>
+              </Link>
+              <Link
+                to="/"
+                className="flex items-center space-x-2 py-3 hover:bg-indigo-50 rounded-lg transition px-4"
+                // onClick={() => setisMenuOpen(false)}
+              >
+                <Settings className="w-4 h-4 text-gray-500" />
+                <span className="text-sm font-medium">Settings</span>
+              </Link>
+            </div>
+            <span className="border-t border-gray-200 my-4"></span>
+            <button
+              className="p-3 rounded-lg text-red-500 space-x-2 flex items-center hover:bg-red-50 transition px-4"
+              onClick={LogOutHanlder}
+            >
+              <LogOut className="w-4 h-4 text-red-500" />
+              <span className="text-red-700 text-sm font-medium">Log Out</span>
+            </button>
           </div>
-          {/* mobile navigation */}
-          {/* <div></div> */}
-          <div className="p-4 space-y-2 text-gray-700 overflow-hidden">
-            <Link
-              to="/dashboard"
-              className="flex items-center space-x-2 py-3 hover:bg-indigo-50 rounded-lg transition"
-              onClick={() => setisMenuOpen(false)}
-            >
-              <Briefcase className="w-4 h-4 text-gray-500" />
-              <span className="text-sm font-medium">Dashboard</span>
-            </Link>
-            <Link
-              to="#"
-              className="flex items-center space-x-2 py-3 hover:bg-indigo-50 rounded-lg transition"
-              onClick={() => setisMenuOpen(false)}
-            >
-              <User className="w-4 h-4 text-gray-500" />
-              <span className="text-sm font-medium">Profile</span>
-            </Link>
-            <Link
-              to="/messages"
-              className="flex items-center space-x-2 py-3 hover:bg-indigo-50 rounded-lg transition"
-              onClick={() => setisMenuOpen(false)}
-            >
-              <Mail className="w-4 h-4 text-gray-500" />
-              <span className="text-sm font-medium">Messages</span>
-            </Link>
-            <Link
-              to="#"
-              className="flex items-center space-x-2 py-3 hover:bg-indigo-50 rounded-lg transition"
-              onClick={() => setisMenuOpen(false)}
-            >
-              <Settings className="w-4 h-4 text-gray-500" />
-              <span className="text-sm font-medium">Settings</span>
-            </Link>
-          </div>
-          <span className="border-t border-gray-200 my-4"></span>
-          <button
-            className="p-3 rounded-lg text-red-500 space-x-2 flex items-center hover:bg-red-50 transition"
-            onClick={LogOutHanlder}
-          >
-            <LogOut className="w-4 h-4 text-red-500" />
-            <span className="text-red-700 text-sm font-medium">Log Out</span>
-          </button>
         </div>
       </div>
     </header>

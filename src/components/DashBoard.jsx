@@ -1,4 +1,4 @@
-import { LayoutDashboard } from "lucide-react";
+import { LayoutDashboard, LoaderCircle } from "lucide-react";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { databaseService } from "../appwrite/databaseService";
@@ -10,7 +10,8 @@ import {
   addTotalAppliedCount,
   addPastWeekData,
 } from "../store/JobsSlice";
-import { DashboardCard, Piechart, Graph , MotivationalCard} from "./index";
+import { DashboardCard, Piechart, Graph, MotivationalCard } from "./index";
+import { Link } from "react-router-dom";
 // import { Select } from "@headlessui/react";
 function DashBoard() {
   const inStore = useSelector((state) => state.jobs.interviewCount);
@@ -76,10 +77,12 @@ function DashBoard() {
       dispatch(addRejectedCount(rejectedCount));
       dispatch(addTotalAppliedCount(totalAppliedCount));
       dispatch(addPastWeekData(pastWeekData));
-      
+
       // update in store also
     } catch (error) {
       console.log("error", error);
+    } finally {
+      setisLoading(false);
     }
   }, []);
   const pieChartData = useMemo(() => {
@@ -94,7 +97,7 @@ function DashBoard() {
     const map = new Map();
     let startDate = new Date();
     startDate.setDate(startDate.getDate() - 7);
-    startDate = startDate.getDate()
+    startDate = startDate.getDate();
     for (let i = 0; i < pastWeekData.length; i++) {
       if (
         pastWeekData[i].appliedAt >= startDate &&
@@ -106,16 +109,17 @@ function DashBoard() {
         );
       }
     }
-    let arr = []
-    for (const [key,value] of Object.entries(map)) {
+    let arr = [];
+    for (const [key, value] of Object.entries(map)) {
       arr.push({
-        date : key ,
-        count : value
-      })
+        date: key,
+        count: value,
+      });
     }
-    return arr
+    return arr;
   }, [pastWeekData]);
-  // which will run first , as piechartData depends upon 
+  const [isLoading, setisLoading] = useState(true);
+  // which will run first , as piechartData depends upon
   useEffect(() => {
     if (!inStore) {
       fetchData();
@@ -126,6 +130,7 @@ function DashBoard() {
       setofferCount(offerCountinStore);
       setrejectedCount(rejectedCountinStore);
       setpastWeekData(pastWeekDatainStore);
+      setisLoading(false);
     }
   }, [fetchData]);
   const [showPiechart, setshowPiechart] = useState(true);
@@ -135,12 +140,52 @@ function DashBoard() {
         <LayoutDashboard className="size-5 mr-2" />
         Dashboard
       </div>
+      {/* {isLoading ? (<div className="w-full p-3 bg-indigo-50 rounded-xl mt-2 min-h-20 flex justify-center items-center"><LoaderCircle className="animate-spin size-6 "/></div>) : ("")} */}
       <div className="w-full p-3 bg-indigo-50 rounded-xl mt-2">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
-          <DashboardCard label="Total Applied" data={totalAppliedCount} />
-          <DashboardCard label="Selected" data={offerCount} />
-          <DashboardCard label="Rejected" data={rejectedCount} />
-          <DashboardCard label="Interview" data={interviewCount} />
+          <Link to = "/">
+            <DashboardCard
+              label="Total Applied"
+              data={
+                isLoading ? (
+                  <LoaderCircle className="animate-spin size-5" />
+                ) : (
+                  totalAppliedCount
+                )
+              }
+            />
+          </Link>
+          <DashboardCard
+            label="Selected"
+            data={
+              isLoading ? (
+                <LoaderCircle className="animate-spin size-5" />
+              ) : (
+                offerCount
+              )
+            }
+            className=""
+          />
+          <DashboardCard
+            label="Rejected"
+            data={
+              isLoading ? (
+                <LoaderCircle className="animate-spin size-5" />
+              ) : (
+                rejectedCount
+              )
+            }
+          />
+          <DashboardCard
+            label="Interview"
+            data={
+              isLoading ? (
+                <LoaderCircle className="animate-spin size-5" />
+              ) : (
+                interviewCount
+              )
+            }
+          />
         </div>
       </div>
       {/* for graphs */}
@@ -163,10 +208,14 @@ function DashBoard() {
               </select>
             </div>
           </div>
-          {showPiechart ? <Piechart data={pieChartData} /> : <Graph data={graphData} />}
+          {showPiechart ? (
+            <Piechart data={pieChartData} />
+          ) : (
+            <Graph data={graphData} />
+          )}
         </div>
         <div className="md:flex-[30%] md:h-full">
-              <MotivationalCard/>  
+          <MotivationalCard />
         </div>
       </div>
     </div>
