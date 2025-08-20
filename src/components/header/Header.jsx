@@ -66,7 +66,7 @@ function Header() {
   console.log("login ", isLoggedIn);
   const total = useSelector((state)=>state.jobs)
   // console.log("T",total);
-  
+  // console.log("re-rendered");
   return (
     <header className="w-full">
       <div className="px-6 md:px-15 bg-indigo-400 py-2 flex items-center justify-between dark:text-white">
@@ -208,12 +208,15 @@ function Header() {
           )}
         </div>
       </div>
+      {/*  for mobile  */}
       <div
         className={
           isMenuOpen
-            ? "fixed left-0 top-0 bottom-0 right-0 opacity-100 transition duration-300 translate-x-0 bg-white"
+            ? "fixed left-0 top-0 bottom-0 right-0 opacity-100 transition duration-300 translate-x-0 bg-white z-100 "
             : "-translate-x-10 opacity-0 transition duration-300 hidden"
         }
+        
+        // onClickCapture={()=>setisMenuOpen(!isMenuOpen)}
       >
         <div className="p-6">
           {/* userProfile */}
@@ -244,7 +247,8 @@ function Header() {
             </span>
           </div>
           {/* mobile navigation */}
-          <div className="p-4 space-y-2 text-gray-700">
+          {/* <div></div> */}
+          <div className="p-4 space-y-2 text-gray-700 overflow-hidden">
             <Link
               to="/dashboard"
               className="flex items-center space-x-2 py-3 hover:bg-indigo-50 rounded-lg transition"

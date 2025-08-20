@@ -76,7 +76,7 @@ function JobItem({ data }) {
         const isDeleted = await databaseService.deleteDocument(data.$id);
         console.log(isDeleted);
         if (isDeleted) {
-          navigate("/");
+          location.reload()
         }
       }
     } catch (error) {
