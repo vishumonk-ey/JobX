@@ -23,7 +23,8 @@ import {
   DisclosurePanel,
 } from "@headlessui/react";
 import { Link, useNavigate } from "react-router-dom";
-import {databaseService} from '../appwrite/databaseService'
+import { databaseService } from "../appwrite/databaseService";
+import { button } from "@material-tailwind/react";
 // Sample data for testing
 // const data = {
 //   CompanyName: "TechCorp Solutions",
@@ -65,7 +66,7 @@ import {databaseService} from '../appwrite/databaseService'
 
 function JobItem({ data }) {
   console.log(data);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const handleDelete = async () => {
     try {
       if (
@@ -76,46 +77,97 @@ function JobItem({ data }) {
         const isDeleted = await databaseService.deleteDocument(data.$id);
         console.log(isDeleted);
         if (isDeleted) {
-          location.reload()
+          location.reload();
         }
       }
     } catch (error) {
-      console.log("error while deleting",error);
-      
+      console.log("error while deleting", error);
     }
   };
   return (
     <div className="w-full p-2 border-b min-w-[732px] border-b-indigo-200 hover:px-2.5 rounded transition">
       <div className="w-full scrollbar-hide text-gray-700">
         <Disclosure>
-          <DisclosureButton className="w-full flex items-center">
-            <div className="flex flex-1 items-center">
-              <p className="flex-1 min-w-[200px] text-left text-base md:text-lg">
-                {data.CompanyName}
-              </p>
-              <p className="flex-1 min-w-[200px] text-left text-base md:text-lg">
-                {data.Role}
-              </p>
-              <div className="flex-1 min-w-[150px]">
-                <p
-                  className={`mx-auto w-fit px-3 py-1 text-center rounded-xl text-base ${
-                    data.Status === "Offer"
-                      ? "bg-emerald-100 text-emerald-700 "
-                      : data.Status === "Rejected"
-                      ? "bg-red-100 text-red-700"
-                      : data.Status === "Interview"
-                      ? "bg-blue-100 text-blue-700 "
-                      : "bg-gray-300"
-                  }`}
-                >
-                  {data.Status}
+          <div className="w-full flex items-center px-1">
+            <DisclosureButton className="grow-1">
+              <div className="flex flex-1 items-center">
+                <p className="flex-1 min-w-[200px] text-left text-base md:text-lg">
+                  {data.CompanyName}
+                </p>
+                <p className="flex-1 min-w-[200px] text-left text-base md:text-lg">
+                  {data.Role}
+                </p>
+                <div className="flex-1 min-w-[150px]">
+                  <p
+                    className={`mx-auto w-fit px-3 py-1 text-center rounded-xl text-base ${
+                      data.Status === "Offer"
+                        ? "bg-emerald-100 text-emerald-700 "
+                        : data.Status === "Rejected"
+                        ? "bg-red-100 text-red-700"
+                        : data.Status === "Interview"
+                        ? "bg-blue-100 text-blue-700 "
+                        : "bg-gray-300"
+                    }`}
+                  >
+                    {data.Status}
+                  </p>
+                </div>
+                <p className="flex-1 min-w-[150px] text-left text-base md:text-lg">
+                  {data.AppliedDate.slice(0, 10)}
                 </p>
               </div>
-              <p className="flex-1 min-w-[150px] text-left text-base md:text-lg">
-                {data.AppliedDate.slice(0, 10)}
-              </p>
-            </div>
-            <Popover >
+              {/* <Popover >
+              <PopoverButton className="outline-none group">
+                <span className="w-8 h-8 rounded-full hover:bg-gray-100 transition-all duration-200 flex items-center justify-center group-hover:scale-110">
+                  <MoreHorizontal className="w-4 h-4 text-gray-600 group-hover:text-gray-800" />
+                </span>
+              </PopoverButton>
+              <Transition
+                enterFrom="translate-x-full opacity-0"
+                enterTo="transition translate-x-0 opacity-100 duration-300"
+                leaveFrom="translate-x-0 opacity-100"
+                leaveTo="translate-x-full opacity-0 transition duration-300"
+              >
+                <PopoverPanel
+                  anchor="bottom end"
+                  className="w-48 bg-white rounded-xl shadow-xl border border-gray-100 p-2 z-50 animate-slide-from-right duration-200"
+                >
+                  <div className="space-y-1">
+                    <Link to={`/view-page/${data.$id}`} className="block">
+                      <div className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 transition-all duration-200 group">
+                        <Eye className="w-4 h-4 text-blue-600 group-hover:scale-110 transition-transform" />
+                        <span className="text-sm font-medium text-gray-700 group-hover:text-blue-700">
+                          View Details
+                        </span>
+                      </div>
+                    </Link>
+
+                    <Link to={`/edit-page/${data.$id}`} className="block">
+                      <div className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-green-50 transition-all duration-200 group">
+                        <Edit3 className="w-4 h-4 text-green-600 group-hover:scale-110 transition-transform" />
+                        <span className="text-sm font-medium text-gray-700 group-hover:text-green-700">
+                          Edit Job
+                        </span>
+                      </div>
+                    </Link>
+
+                    <div className="border-t border-gray-100 my-1"></div>
+
+                    <div
+                      className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-red-50 transition-all duration-200 group"
+                      onClick={handleDelete}
+                    >
+                      <Trash2 className="w-4 h-4 text-red-600 group-hover:scale-110 transition-transform" />
+                      <span className="text-sm font-medium text-gray-700 group-hover:text-red-700">
+                        Delete Job
+                      </span>
+                    </div>
+                  </div>
+                </PopoverPanel>
+              </Transition>
+            </Popover> */}
+            </DisclosureButton>
+            <Popover>
               <PopoverButton className="outline-none group">
                 <span className="w-8 h-8 rounded-full hover:bg-gray-100 transition-all duration-200 flex items-center justify-center group-hover:scale-110">
                   <MoreHorizontal className="w-4 h-4 text-gray-600 group-hover:text-gray-800" />
@@ -165,7 +217,7 @@ function JobItem({ data }) {
                 </PopoverPanel>
               </Transition>
             </Popover>
-          </DisclosureButton>
+          </div>
           <DisclosurePanel className="transition-all duration-300 ease-in-out">
             <div className="p-6 mt-2 bg-gradient-to-r from-gray-50 to-indigo-50/30 rounded-xl">
               <div className="space-y-4">
@@ -225,3 +277,15 @@ function JobItem({ data }) {
 }
 
 export default JobItem;
+{
+  /*
+1..<button>
+  <button></button>
+</button>
+
+2..<button>
+  <div>
+    <button></button>
+  </div>
+</button> */
+}
