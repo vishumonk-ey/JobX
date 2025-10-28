@@ -17,30 +17,30 @@ class Auth {
         name
       );
       if (promise) {
-        const sessionObject = await this.Login({email, password});
-        console.log("return value after appwrite login : ",sessionObject);
-        if(sessionObject){
-          return await this.getCurrentUser()
+        const sessionObject = await this.Login({ email, password });
+        console.log("return value after appwrite login : ", sessionObject);
+        if (sessionObject) {
+          return await this.getCurrentUser();
         }
       }
     } catch (error) {
-      console.log("error in appwrite signup :",error);
+      console.log("error in appwrite signup :", error);
       throw error;
     }
   }
   async Login({ email, password }) {
     try {
-      console.log("email , pass" , email , password);
-      
+      console.log("email , pass", email, password);
+
       const sessionObject = await this.account.createEmailPasswordSession(
         email,
         password
       );
-      if(sessionObject){
-        return await this.getCurrentUser()
+      if (sessionObject) {
+        return await this.getCurrentUser();
       }
     } catch (error) {
-      console.log("error in logging in: ",error)
+      console.log("error in logging in: ", error);
       throw error;
     }
   }
@@ -55,8 +55,9 @@ class Auth {
   OAuthGoogle() {
     this.account.createOAuth2Session(
       OAuthProvider.Google,
-      "home site link**********",
-      "back to login ***********"
+      "http://localhost:5173",
+      "http://localhost:5173/login" ,
+      // ["account"]
     );
     // wont work as just the previous method runs , user is redirected to the google oauth and my execution stops
   }

@@ -2,10 +2,18 @@ import { Loader, LoaderCircle, LoaderPinwheel } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { authService } from "../appwrite/authService";
 function AuthLayout({ isRequired, children }) {
-  console.log("children is :", children);
+  // console.log("children is :", children);
+   authService.getCurrentUser().then(
+    (res)=>{
+      console.log("respone from get user",res);
+    }
+   ).catch((err) => console.log("err recieved in get user" , err)
+  )
+  
   const isAuthenticated = useSelector((state) => state.auth.isLoggedIn);
-  console.log(" whole state : ", isAuthenticated);
+  // console.log(" whole state : ", isAuthenticated);
 
   const [isLoading, setisLoading] = useState(true);
   const navigate = useNavigate();

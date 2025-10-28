@@ -90,6 +90,7 @@ function Login() {
               label="Password"
               placeholder="Password"
               type="password"
+              
               autoComplete="off"
               {...register("password", {
                 required: true,
