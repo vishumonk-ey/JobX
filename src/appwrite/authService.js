@@ -55,8 +55,9 @@ class Auth {
   OAuthGoogle() {
     this.account.createOAuth2Session(
       OAuthProvider.Google,
-      "http://localhost:5173",
-      "http://localhost:5173/login" ,
+      // "http://localhost:5173",
+      "https://job-x.vercel.app", 
+      "https://job-x.vercel.app/login" ,
       // ["account"]
     );
     // wont work as just the previous method runs , user is redirected to the google oauth and my execution stops
