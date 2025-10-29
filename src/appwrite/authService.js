@@ -52,15 +52,22 @@ class Auth {
       throw error;
     }
   }
+  // OAuthGoogle() {
+  //   this.account.createOAuth2Session(
+  //     OAuthProvider.Google,
+  //     // "http://localhost:5173",
+  //     "https://job-x.vercel.app",
+  //     "https://job-x.vercel.app/login" ,
+  //     // ["account"]
+  //   );
+  //   // wont work as just the previous method runs , user is redirected to the google oauth and my execution stops
+  // }
   OAuthGoogle() {
-    this.account.createOAuth2Session(
-      OAuthProvider.Google,
-      // "http://localhost:5173",
-      "https://job-x.vercel.app", 
-      "https://job-x.vercel.app/login" ,
-      // ["account"]
+    this.account.createOAuth2Token(
+      "google",
+      "https://job-x.vercel.app",
+      "https://job-x.vercel.app/login"
     );
-    // wont work as just the previous method runs , user is redirected to the google oauth and my execution stops
   }
   OAuthGithub() {
     this.account.createOAuth2Session(
