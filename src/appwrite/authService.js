@@ -65,7 +65,7 @@ class Auth {
   OAuthGoogle() {
     this.account.createOAuth2Token(
       "google",
-      "https://job-x.vercel.app",
+      "https://job-x.vercel.app/login",
       "https://job-x.vercel.app/login"
     );
   }
