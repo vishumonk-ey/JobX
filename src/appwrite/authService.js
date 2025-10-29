@@ -76,6 +76,15 @@ class Auth {
       "back to login ***********"
     );
   }
+  async createSessionWithToken({ userId, secret }) {
+    try {
+      await this.account.createSession({ userId, secret });
+      const user = await this.getCurrentUser()
+      return user
+    } catch (error) {
+      throw error;
+    }
+  }
   async getCurrentUser() {
     try {
       const promise = await this.account.get();

@@ -16,9 +16,21 @@ function Login() {
   const [error, setError] = useState();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const urlParams = new URLSearchParams(window.location.origin);
+  const secret = URLSearchParams.get("secret");
+  const userId = URLSearchParams.get("userId");
   const LoginHandler = async (data) => {
     try {
-      const loggedInUserData = await authService.Login(data);
+      let loggedInUserData;
+      if (secret && userId) {
+        const userData = await authService.createSessionWithToken({
+          userId,
+          secret,
+        });
+        loggedInUserData = userData;
+      } else {
+        loggedInUserData = await authService.Login(data);
+      }
       if (loggedInUserData) {
         dispatch(login(loggedInUserData));
         navigate("/");
@@ -90,7 +102,6 @@ function Login() {
               label="Password"
               placeholder="Password"
               type="password"
-              
               autoComplete="off"
               {...register("password", {
                 required: true,
