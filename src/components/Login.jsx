@@ -17,8 +17,8 @@ function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const urlParams = new URLSearchParams(window.location.origin);
-  const secret = URLSearchParams.get("secret");
-  const userId = URLSearchParams.get("userId");
+  const secret = urlParams.get("secret");
+  const userId = urlParams.get("userId");
   const LoginHandler = async (data) => {
     try {
       let loggedInUserData;
