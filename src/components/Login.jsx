@@ -22,17 +22,7 @@ function Login() {
   const LoginHandler = async (data) => {
     try {
       let loggedInUserData;
-      if (secret && userId) {
-        const userData = await authService.createSessionWithToken({
-          userId,
-          secret,
-        });
-        loggedInUserData = userData;
-        console.log("loggedInUserData : ",loggedInUserData);
-        
-      } else {
-        loggedInUserData = await authService.Login(data);
-      }
+      loggedInUserData = await authService.Login(data);
       if (loggedInUserData) {
         dispatch(login(loggedInUserData));
         navigate("/");
@@ -48,6 +38,27 @@ function Login() {
   const githubAuthHandler = () => {
     authService.OAuthGithub();
   };
+  const loginWithToken = async () => {
+    try {
+      if (secret && userId) {
+        const userData = await authService.createSessionWithToken({
+          userId,
+          secret,
+        });
+        loggedInUserData = userData;
+        console.log("loggedInUserData : ", loggedInUserData);
+        if (loggedInUserData) {
+          dispatch(login(loggedInUserData));
+          navigate("/");
+        }
+      }
+    } catch (error) {
+      console.log("error in loggin in with token : ", error);
+    }
+  };
+  useEffect(() => {
+    loginWithToken()
+  }, [loginWithToken]);
   return (
     <div className="w-full flex items-center justify-center">
       <div className="w-full max-w-lg bg-indigo-200 flex flex-col items-center p-10 rounded-lg">
