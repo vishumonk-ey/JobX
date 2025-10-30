@@ -28,6 +28,8 @@ function Login() {
           secret,
         });
         loggedInUserData = userData;
+        console.log("loggedInUserData : ",loggedInUserData);
+        
       } else {
         loggedInUserData = await authService.Login(data);
       }
