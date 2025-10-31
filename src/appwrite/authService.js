@@ -72,10 +72,10 @@ class Auth {
     );
   }
   OAuthGithub() {
-    this.account.createOAuth2Session(
+    this.account.createOAuth2Token(
       OAuthProvider.Github,
-      "home site link**********",
-      "back to login ***********"
+      "http://localhost:5173/login",
+      "http://localhost:5173/login"
     );
   }
   async createSessionWithToken({ userId, secret }) {
