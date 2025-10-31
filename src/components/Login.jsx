@@ -16,9 +16,12 @@ function Login() {
   const [error, setError] = useState();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const urlParams = new URLSearchParams(window.location.origin);
+  const urlParams = new URLSearchParams(window.location.search);
   const secret = urlParams.get("secret");
   const userId = urlParams.get("userId");
+  console.log("s" , secret);
+  console.log("uid" , userId);
+  
   const LoginHandler = async (data) => {
     try {
       let loggedInUserData;
@@ -40,12 +43,16 @@ function Login() {
   };
   const loginWithToken = async () => {
     try {
+        // console.log("Ran");
+        // console.log(secret);
+        // console.log("uid" , userId);
+        
       if (secret && userId) {
         const userData = await authService.createSessionWithToken({
           userId,
           secret,
         });
-        loggedInUserData = userData;
+        const loggedInUserData = userData;
         console.log("loggedInUserData : ", loggedInUserData);
         if (loggedInUserData) {
           dispatch(login(loggedInUserData));

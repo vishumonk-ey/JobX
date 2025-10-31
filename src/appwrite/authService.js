@@ -67,6 +67,8 @@ class Auth {
       "google",
       "https://job-x.vercel.app/login",
       "https://job-x.vercel.app/login"
+      // "http://localhost:5173/login",
+      // "http://localhost:5173/login"
     );
   }
   OAuthGithub() {
@@ -78,7 +80,7 @@ class Auth {
   }
   async createSessionWithToken({ userId, secret }) {
     try {
-      await this.account.createSession({ userId, secret });
+      await this.account.createSession(userId , secret);
       const user = await this.getCurrentUser()
       return user
     } catch (error) {
